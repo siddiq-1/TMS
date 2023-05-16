@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TMS.Service.Interface
 {
-    internal interface IRoleService
+    public interface IRoleService
     {
     }
 }

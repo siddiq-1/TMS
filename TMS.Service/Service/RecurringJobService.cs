@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TMS.Service.Service
 {
-    internal class RecurringJobService
+    public class RecurringJobService
     {
     }
 }
