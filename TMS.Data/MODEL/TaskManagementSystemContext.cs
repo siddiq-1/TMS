@@ -271,7 +271,7 @@ namespace TMS.Data.MODEL
 
             modelBuilder.Entity<UserManagerMapping>(entity =>
             {
-                entity.ToTable("UserManagerMapping");
+                entity.ToTable("UserManagerRepository");
 
                 entity.Property(e => e.CreatedDate)
                     .HasColumnType("date")

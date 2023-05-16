@@ -12,22 +12,19 @@ namespace TMS.Data.Infrastructure
     public class Repository<T> : IRepository<T> where T : class
     {
         private readonly TaskManagementSystemContext _tmsContext;
-        private readonly DbSet<T> _dbSet;
-        public Repository(TaskManagementSystemContext tmsContext, DbSet<T> dbSet)
+        public Repository(TaskManagementSystemContext tmsContext)
         {
             _tmsContext = tmsContext;
-            _dbSet = tmsContext.Set<T>();
         }
         public async Task AddAsync(T model)
         {
-            await _dbSet.AddAsync(model);
-            await _tmsContext.SaveChangesAsync();
+            var dbSet = _tmsContext.Set<T>();
+            await dbSet.AddAsync(model);
         }
 
-        public async Task DeleteAsync(T model)
+        public void DeleteAsync(T model)
         {
             _tmsContext.Entry(model).State = EntityState.Deleted;
-            await _tmsContext.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null,
@@ -35,7 +32,7 @@ namespace TMS.Data.Infrastructure
                 int page = 0,
                 int take = 10)
         {
-            IQueryable<T> query = _dbSet;
+            IQueryable<T> query = _tmsContext.Set<T>();
 
             if (filter != null)
                 query = query.Where(filter);
@@ -50,18 +47,20 @@ namespace TMS.Data.Infrastructure
 
         public async Task<T> GetByIdAsync(int id)
         {
-            return await _dbSet.FindAsync(id);
+            var dbSet = _tmsContext.Set<T>();
+            return await dbSet.FindAsync(id);
         }
 
         public async Task<T> GetFirtOrDefaultAsync(Expression<Func<T, bool>> predicate)
         {
-            return await _dbSet.FirstOrDefaultAsync(predicate);
+            var dbSet = _tmsContext.Set<T>();
+            return await dbSet.FirstOrDefaultAsync(predicate);
         }
 
-        public async Task UpdateAsync(T model)
+        public void UpdateAsync(T model)
         {
-            _dbSet.Update(model);
-            await _tmsContext.SaveChangesAsync();
+            var dbSet = _tmsContext.Set<T>();
+            dbSet.Update(model);
         }
     }
 }
