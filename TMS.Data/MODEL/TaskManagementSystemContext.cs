@@ -34,7 +34,7 @@ namespace TMS.Data.MODEL
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Data Source=DESKTOP-TFBH7SV;Initial Catalog=TaskManagementSystem;Integrated Security=True;");
+                optionsBuilder.UseSqlServer("Data Source=DESKTOP-0V6LNT4;Initial Catalog=TaskManagementSystem;Integrated Security=True;");
             }
         }
 

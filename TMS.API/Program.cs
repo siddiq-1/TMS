@@ -11,6 +11,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 var app = builder.Build();
 builder.Services.AddDbContext<TaskManagementSystemContext>(model => model.UseSqlServer(builder.Configuration.GetConnectionString("TaskManagementSystem")));
+builder.Services.AddAutoMapper(typeof(Program));
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
