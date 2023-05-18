@@ -9,7 +9,6 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using TMS.Model;
-using TMS.ModelDTO.User;
 using TMS.Service.Interface;
 using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
 
@@ -22,7 +21,7 @@ namespace TMS.Service.Service
         {
             _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["JWT:TokenKey"]));
         }
-        public string GetToken(UserDto user)
+        public string GetToken(User user)
         {
             var claims = new List<Claim>()
             {
