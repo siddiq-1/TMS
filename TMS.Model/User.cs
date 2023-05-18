@@ -11,7 +11,6 @@ namespace TMS.Model
             TaskAssignmentAssignedByNavigations = new HashSet<TaskAssignment>();
             TaskAssignmentAssignedToNavigations = new HashSet<TaskAssignment>();
             UserManagerMappings = new HashSet<UserManagerMapping>();
-            UserRoleMappings = new HashSet<UserRoleMapping>();
         }
 
         public int Id { get; set; }
@@ -31,6 +30,6 @@ namespace TMS.Model
         public virtual ICollection<TaskAssignment> TaskAssignmentAssignedByNavigations { get; set; }
         public virtual ICollection<TaskAssignment> TaskAssignmentAssignedToNavigations { get; set; }
         public virtual ICollection<UserManagerMapping> UserManagerMappings { get; set; }
-        public virtual ICollection<UserRoleMapping> UserRoleMappings { get; set; }
+        public virtual UserRoleMapping UserRoleMappings { get; set; }
     }
 }

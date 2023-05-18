@@ -16,8 +16,8 @@ namespace TMS.Data.Infrastructure
                 int take = 10);
         Task<T> GetByIdAsync(int id);
         Task AddAsync(T model);
-        void UpdateAsync(T model);
-        void DeleteAsync(T model);
+        void Update(T model);
+        void Delete(T model);
         Task<T> GetFirtOrDefaultAsync(Expression<Func<T, bool>> predicate);
     }
 }

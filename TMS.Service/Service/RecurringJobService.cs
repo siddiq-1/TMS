@@ -9,6 +9,7 @@ using TMS.Data.Infrastructure;
 using TMS.Model;
 using TMS.ModelDTO;
 using TMS.Service.Interface;
+using TMS.Utility;
 using Task = TMS.Model.Task;
 
 namespace TMS.Service.Service
@@ -29,30 +30,43 @@ namespace TMS.Service.Service
             await _unitOfWork.CommitAsync();
             return recurringJob;
         }
-        public async Task<bool> DeleteAsync(RecurringJobDto model)
+        public async Task<bool> DeleteAsync(int id)
         {
-            var recurringJob = _mapper.Map<RecurringJobDto, RecurringJob>(model);
-             _unitOfWork.RecurringJobRepository.DeleteAsync(recurringJob);
-            return  await _unitOfWork.CommitAsync();
+            var recurringJob = await _unitOfWork.RecurringJobRepository.GetByIdAsync(id);
+            _unitOfWork.RecurringJobRepository.Delete(recurringJob);
+            var result = await _unitOfWork.CommitAsync();
+            return HelperMethod.Commit(result);
         }
-        public Task<IEnumerable<RecurringJobDto>> GetAllAsync()
+        public async Task<IEnumerable<RecurringJobDto>> GetAllAsync(Expression<Func<RecurringJob, bool>>? filter = null,
+                Func<IQueryable<RecurringJob>, IOrderedQueryable<RecurringJob>>? orderBy = null,
+                int page = 0,
+                int take = 10)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<RecurringJobDto> GetByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<RecurringJobDto> GetFirtOrDefaultAsync(Expression<Func<RecurringJobDto, bool>> predicate)
-        {
-            throw new NotImplementedException();
+            var result = await _unitOfWork.RecurringJobRepository.GetAllAsync(filter, orderBy, page, take);
+            return _mapper.Map<IEnumerable<RecurringJob>, IEnumerable<RecurringJobDto>>(result);
         }
 
-        public Task<RecurringJob> UpdateAsync(RecurringJobDto model)
+        public async Task<RecurringJobDto> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var result = await _unitOfWork.RecurringJobRepository.GetByIdAsync(id);
+            return _mapper.Map<RecurringJob, RecurringJobDto>(result);
+        }
+
+        public async Task<RecurringJobDto> GetFirtOrDefaultAsync(Expression<Func<RecurringJob, bool>> predicate)
+        {
+            var result = await _unitOfWork.RecurringJobRepository.GetFirtOrDefaultAsync(predicate);
+            return _mapper.Map<RecurringJob, RecurringJobDto>(result);
+        }
+
+        public async Task<RecurringJob> UpdateAsync(int userId, int recurringJobId, RecurringJobDto model)
+        {
+            var recurringJob = await _unitOfWork.RecurringJobRepository.GetByIdAsync(recurringJobId);
+            recurringJob.Name = model.Name;
+            recurringJob.ModifiedDate = DateTime.UtcNow;
+            recurringJob.ModifiedBy = userId;
+            _unitOfWork.RecurringJobRepository.Update(recurringJob);
+            await _unitOfWork.CommitAsync();
+            return recurringJob;
         }
     }
 }

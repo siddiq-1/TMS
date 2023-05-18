@@ -16,8 +16,7 @@ namespace TMS.Model
         public int CreatedBy { get; set; }
         public int ModifiedBy { get; set; }
         public bool? IsActive { get; set; }
-
-        public virtual ReportTypeMaster ModifiedByNavigation { get; set; } = null!;
+        public virtual ReportTypeMaster ReportType { get; set; } = null!;
         public virtual RecurringJob RecurringJob { get; set; } = null!;
         public virtual User User { get; set; } = null!;
     }

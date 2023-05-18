@@ -22,7 +22,7 @@ namespace TMS.Data.Infrastructure
             await dbSet.AddAsync(model);
         }
 
-        public void DeleteAsync(T model)
+        public void Delete(T model)
         {
             _tmsContext.Entry(model).State = EntityState.Deleted;
         }
@@ -57,7 +57,7 @@ namespace TMS.Data.Infrastructure
             return await dbSet.FirstOrDefaultAsync(predicate);
         }
 
-        public void UpdateAsync(T model)
+        public void Update(T model)
         {
             var dbSet = _tmsContext.Set<T>();
             dbSet.Update(model);

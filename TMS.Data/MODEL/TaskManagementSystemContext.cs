@@ -117,7 +117,7 @@ namespace TMS.Data.MODEL
 
                 entity.Property(e => e.ScheduleTime).HasMaxLength(100);
 
-                entity.HasOne(d => d.ModifiedByNavigation)
+                entity.HasOne(d => d.ReportType)
                     .WithMany(p => p.ScheduleReports)
                     .HasForeignKey(d => d.ModifiedBy)
                     .HasConstraintName("FK_ScheduleReport_ReportTypeMaster");

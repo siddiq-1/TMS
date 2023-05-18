@@ -12,11 +12,14 @@ namespace TMS.Service.Interface
 {
     public interface IRecurringJobService
     {
-        Task<IEnumerable<RecurringJobDto>> GetAllAsync();
+        Task<IEnumerable<RecurringJobDto>> GetAllAsync(Expression<Func<RecurringJob, bool>>? filter = null,
+                Func<IQueryable<RecurringJob>, IOrderedQueryable<RecurringJob>>? orderBy = null,
+                int page = 0,
+                int take = 10);
         Task<RecurringJobDto> GetByIdAsync(int id);
         Task<RecurringJob> AddAsync(RecurringJobDto model);
-        Task<RecurringJob> UpdateAsync(RecurringJobDto model);
-        Task DeleteAsync(RecurringJobDto model);
-        Task<RecurringJobDto> GetFirtOrDefaultAsync(Expression<Func<RecurringJobDto, bool>> predicate);
+        Task<RecurringJob> UpdateAsync(int userId, int recurringJobId, RecurringJobDto model);
+        Task<bool> DeleteAsync(int id);
+        Task<RecurringJobDto> GetFirtOrDefaultAsync(Expression<Func<RecurringJob, bool>> predicate);
     }
 }
