@@ -37,13 +37,13 @@ namespace TMS.Service.Service
             var result = await _unitOfWork.CommitAsync();
             return HelperMethod.Commit(result);
         }
-        public async Task<IEnumerable<RecurringJobDto>> GetAllAsync(Expression<Func<RecurringJob, bool>>? filter = null,
+        public async Task<PageResult<RecurringJobDto>> GetAllAsync(Expression<Func<RecurringJob, bool>>? filter = null,
                 Func<IQueryable<RecurringJob>, IOrderedQueryable<RecurringJob>>? orderBy = null,
                 int page = 0,
                 int take = 10)
         {
             var result = await _unitOfWork.RecurringJobRepository.GetAllAsync(filter, orderBy, page, take);
-            return _mapper.Map<IEnumerable<RecurringJob>, IEnumerable<RecurringJobDto>>(result);
+            return _mapper.Map<PageResult<RecurringJob>, PageResult<RecurringJobDto>>(result);
         }
 
         public async Task<RecurringJobDto> GetByIdAsync(int id)

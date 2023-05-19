@@ -7,118 +7,52 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TMS.Data.MODEL;
 using TMS.Model;
+using TMS.ModelDTO.Task;
+using TMS.ModelDTO.User;
+using TMS.Service.Interface;
+using TMS.Utility;
 
 namespace TMS.API.Controllers.Task
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TaskCategoryController : ControllerBase
+    public class TaskCategoryController : BaseApiController
     {
-        private readonly TaskManagementSystemContext _context;
+        private readonly ITaskCategoryService _taskCategoryService;
 
-        public TaskCategoryController(TaskManagementSystemContext context)
+        public TaskCategoryController(ITaskCategoryService taskCategoryService)
         {
-            _context = context;
+            _taskCategoryService = taskCategoryService;
         }
 
-        // GET: api/TaskCategory
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TaskCategory>>> GetTaskCategories()
+        public async Task<ServiceResponse<PageResult<TaskCategoryDto>>> GetTaskCategorys()
         {
-            if (_context.TaskCategories == null)
-            {
-                return NotFound();
-            }
-            return await _context.TaskCategories.ToListAsync();
+            return Response(await _taskCategoryService.GetAllAsync());
         }
 
-        // GET: api/TaskCategory/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<TaskCategory>> GetTaskCategory(int id)
+        public async Task<ServiceResponse<TaskCategoryDto>> GetTaskCategoryById(int id)
         {
-            if (_context.TaskCategories == null)
-            {
-                return NotFound();
-            }
-            var taskCategory = await _context.TaskCategories.FindAsync(id);
-
-            if (taskCategory == null)
-            {
-                return NotFound();
-            }
-
-            return taskCategory;
+            return Response(await _taskCategoryService.GetByIdAsync(id));
         }
 
-        // PUT: api/TaskCategory/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTaskCategory(int id, TaskCategory taskCategory)
+        public async Task<ServiceResponse<TaskCategory>> UpdateTaskCategory(int id, TaskCategoryDto taskCategory)
         {
-            if (id != taskCategory.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(taskCategory).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!TaskCategoryExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            return Response(await _taskCategoryService.UpdateAsync(userId, id, taskCategory));
         }
 
-        // POST: api/TaskCategory
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<TaskCategory>> PostTaskCategory(TaskCategory taskCategory)
+        public async Task<ServiceResponse<TaskCategory>> CreateTaskCategory(TaskCategoryDto taskCategory)
         {
-            if (_context.TaskCategories == null)
-            {
-                return Problem("Entity set 'TaskManagementSystemContext.TaskCategories'  is null.");
-            }
-            _context.TaskCategories.Add(taskCategory);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetTaskCategory", new { id = taskCategory.Id }, taskCategory);
+            return Response(await _taskCategoryService.AddAsync(taskCategory));
         }
 
-        // DELETE: api/TaskCategory/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTaskCategory(int id)
+        public async Task<ServiceResponse<bool>> DeleteTaskCategory(int id)
         {
-            if (_context.TaskCategories == null)
-            {
-                return NotFound();
-            }
-            var taskCategory = await _context.TaskCategories.FindAsync(id);
-            if (taskCategory == null)
-            {
-                return NotFound();
-            }
-
-            _context.TaskCategories.Remove(taskCategory);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool TaskCategoryExists(int id)
-        {
-            return (_context.TaskCategories?.Any(e => e.Id == id)).GetValueOrDefault();
+            return Response(await _taskCategoryService.DeleteAsync(id));
         }
     }
 }

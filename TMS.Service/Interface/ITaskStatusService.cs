@@ -6,13 +6,14 @@ using System.Text;
 using System.Threading.Tasks;
 using TMS.Model;
 using TMS.ModelDTO.Task;
+using TMS.Utility;
 using Task = TMS.Model.Task;
 
 namespace TMS.Service.Interface
 {
     public interface ITaskStatusService
     {
-        Task<IEnumerable<TaskStatusMasterDto>> GetAllAsync(Expression<Func<TaskStatusMaster, bool>>? filter = null,
+        Task<PageResult<TaskStatusMasterDto>> GetAllAsync(Expression<Func<TaskStatusMaster, bool>>? filter = null,
                   Func<IQueryable<TaskStatusMaster>, IOrderedQueryable<TaskStatusMaster>>? orderBy = null,
                   int page = 0,
                   int take = 10);

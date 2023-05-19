@@ -7,13 +7,14 @@ using System.Threading.Tasks;
 using TMS.Model;
 using TMS.ModelDTO.Task;
 using TMS.ModelDTO.User;
+using TMS.Utility;
 using Task = TMS.Model.Task;
 
 namespace TMS.Service.Interface
 {
     public interface IUserManagerService
     {
-        Task<IEnumerable<UserManagerMappingDto>> GetAllAsync(Expression<Func<UserManagerMapping, bool>>? filter = null,
+        Task<PageResult<UserManagerMappingDto>> GetAllAsync(Expression<Func<UserManagerMapping, bool>>? filter = null,
               Func<IQueryable<UserManagerMapping>, IOrderedQueryable<UserManagerMapping>>? orderBy = null,
               int page = 0,
               int take = 10);

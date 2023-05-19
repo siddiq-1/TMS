@@ -36,17 +36,17 @@ namespace TMS.Service.Service
             var result = await _unitOfWork.CommitAsync();
             return HelperMethod.Commit(result);
         }
-        public async Task<IEnumerable<UserRoleMappingDto>> GetAllAsync(Expression<Func<UserRoleMapping, bool>>? filter = null,
+        public async Task<PageResult<UserRoleMappingDto>> GetAllAsync(Expression<Func<UserRoleMapping, bool>>? filter = null,
                 Func<IQueryable<UserRoleMapping>, IOrderedQueryable<UserRoleMapping>>? orderBy = null,
-                int page = 0,
+                int page = 1,
                 int take = 10)
         {
             var result = await _unitOfWork.UserRoleMappingRepository.GetAllAsync(filter, orderBy, page, take);
-            return _mapper.Map<IEnumerable<UserRoleMapping>, IEnumerable<UserRoleMappingDto>>(result);
+            return _mapper.Map<PageResult<UserRoleMapping>, PageResult<UserRoleMappingDto>>(result);
         }
-        public async Task<UserRoleMappingDto> GetByIdAsync(int id)
+        public async Task<UserRoleMappingDto> GetRoleByUserIdAsync(int userId)
         {
-            var result = await _unitOfWork.UserRoleMappingRepository.GetByIdAsync(id);
+            var result = await _unitOfWork.UserRoleMappingRepository.GetFirtOrDefaultAsync(u => u.UserId == userId);
             return _mapper.Map<UserRoleMapping, UserRoleMappingDto>(result);
         }
 

@@ -7,13 +7,14 @@ using System.Threading.Tasks;
 using TMS.Model;
 using TMS.ModelDTO;
 using TMS.ModelDTO.User;
+using TMS.Utility;
 using Task = TMS.Model.Task;
 
 namespace TMS.Service.Interface
 {
     public interface IScheduleReportService
     {
-        Task<IEnumerable<ScheduleReportDto>> GetAllAsync(Expression<Func<ScheduleReport, bool>>? filter = null,
+        Task<PageResult<ScheduleReportDto>> GetAllAsync(Expression<Func<ScheduleReport, bool>>? filter = null,
                            Func<IQueryable<ScheduleReport>, IOrderedQueryable<ScheduleReport>>? orderBy = null,
                            int page = 0,
                            int take = 10);

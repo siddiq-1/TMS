@@ -7,13 +7,14 @@ using System.Threading.Tasks;
 using TMS.Model;
 using TMS.ModelDTO.Task;
 using TMS.ModelDTO.User;
+using TMS.Utility;
 using Task = TMS.Model.Task;
 
 namespace TMS.Service.Interface
 {
     public interface ITaskAssignmentService
     {
-        Task<IEnumerable<TaskAssignmentDto>> GetAllAsync(Expression<Func<TaskAssignment, bool>>? filter = null,
+        Task<PageResult<TaskAssignmentDto>> GetAllAsync(Expression<Func<TaskAssignment, bool>>? filter = null,
               Func<IQueryable<TaskAssignment>, IOrderedQueryable<TaskAssignment>>? orderBy = null,
               int page = 0,
               int take = 10);

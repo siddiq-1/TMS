@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TMS.Model;
+using TMS.ModelDTO;
 using TMS.ModelDTO.User;
 using TMS.Service.Interface;
 
@@ -22,11 +23,11 @@ namespace TMS.Service.Service
             _tokenService = tokenService;
             _mapper = mapper;
         }
-        public async Task<string> Authentication(UserDto userDto)
+        public async Task<string> Authentication(LoginDto loginDto)
         {
-            var result = await _userService.GetFirtOrDefaultAsync(model => (model.UserName == userDto.UserName
-                                                            || model.Email == userDto.Email)
-                                                            && model.Password == userDto.Password);
+            var result = await _userService.GetFirtOrDefaultAsync(model => (model.UserName == loginDto.UserName
+                                                            || model.Email == loginDto.Email)
+                                                            && model.Password == loginDto.Password);
             var user = _mapper.Map<UserDto, User>(result);
             return _tokenService.GetToken(user);
         }

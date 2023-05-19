@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -6,13 +7,14 @@ using System.Text;
 using System.Threading.Tasks;
 using TMS.Model;
 using TMS.ModelDTO;
+using TMS.Utility;
 using Task = TMS.Model.Task;
 
 namespace TMS.Service.Interface
 {
     public interface IReportTypeService
     {
-        Task<IEnumerable<ReportTypeMasterDto>> GetAllAsync(Expression<Func<ReportTypeMaster, bool>>? filter = null,
+        Task<PageResult<ReportTypeMasterDto>> GetAllAsync(Expression<Func<ReportTypeMaster, bool>>? filter = null,
                 Func<IQueryable<ReportTypeMaster>, IOrderedQueryable<ReportTypeMaster>>? orderBy = null,
                 int page = 0,
                 int take = 10);

@@ -7,6 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TMS.Data.MODEL;
 using TMS.Model;
+using TMS.ModelDTO;
+using TMS.ModelDTO.Task;
+using TMS.Service.Interface;
+using TMS.Utility;
 
 namespace TMS.API.Controllers
 {
@@ -14,111 +18,41 @@ namespace TMS.API.Controllers
     [ApiController]
     public class ReportTypeController : BaseApiController
     {
-        private readonly TaskManagementSystemContext _context;
+        private readonly IReportTypeService _reportTypeService;
 
-        public ReportTypeController(TaskManagementSystemContext context)
+        public ReportTypeController(IReportTypeService reportTypeService)
         {
-            _context = context;
+            _reportTypeService = reportTypeService;
         }
 
-        // GET: api/ReportType
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ReportTypeMaster>>> GetReportTypeMasters()
+        public async Task<ServiceResponse<PageResult<ReportTypeMasterDto>>> GetReportTypeMasters()
         {
-          if (_context.ReportTypeMasters == null)
-          {
-              return NotFound();
-          }
-            return await _context.ReportTypeMasters.ToListAsync();
+            return Response(await _reportTypeService.GetAllAsync());
         }
 
-        // GET: api/ReportType/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ReportTypeMaster>> GetReportTypeMaster(int id)
+        public async Task<ServiceResponse<ReportTypeMasterDto>> GetReportTypeMasterById(int id)
         {
-          if (_context.ReportTypeMasters == null)
-          {
-              return NotFound();
-          }
-            var reportTypeMaster = await _context.ReportTypeMasters.FindAsync(id);
-
-            if (reportTypeMaster == null)
-            {
-                return NotFound();
-            }
-
-            return reportTypeMaster;
+            return Response(await _reportTypeService.GetByIdAsync(id));
         }
 
-        // PUT: api/ReportType/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutReportTypeMaster(int id, ReportTypeMaster reportTypeMaster)
+        public async Task<ServiceResponse<ReportTypeMaster>> UpdateReportTypeMaster(int id, ReportTypeMasterDto reportTypeMaster)
         {
-            if (id != reportTypeMaster.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(reportTypeMaster).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ReportTypeMasterExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            return Response(await _reportTypeService.UpdateAsync(userId, id, reportTypeMaster));
         }
 
-        // POST: api/ReportType
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<ReportTypeMaster>> PostReportTypeMaster(ReportTypeMaster reportTypeMaster)
+        public async Task<ServiceResponse<ReportTypeMaster>> CreateReportTypeMaster(ReportTypeMasterDto reportTypeMaster)
         {
-          if (_context.ReportTypeMasters == null)
-          {
-              return Problem("Entity set 'TaskManagementSystemContext.ReportTypeMasters'  is null.");
-          }
-            _context.ReportTypeMasters.Add(reportTypeMaster);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetReportTypeMaster", new { id = reportTypeMaster.Id }, reportTypeMaster);
+            return Response(await _reportTypeService.AddAsync(reportTypeMaster));
         }
 
-        // DELETE: api/ReportType/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteReportTypeMaster(int id)
+        public async Task<ServiceResponse<bool>> DeleteReportTypeMaster(int id)
         {
-            if (_context.ReportTypeMasters == null)
-            {
-                return NotFound();
-            }
-            var reportTypeMaster = await _context.ReportTypeMasters.FindAsync(id);
-            if (reportTypeMaster == null)
-            {
-                return NotFound();
-            }
-
-            _context.ReportTypeMasters.Remove(reportTypeMaster);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool ReportTypeMasterExists(int id)
-        {
-            return (_context.ReportTypeMasters?.Any(e => e.Id == id)).GetValueOrDefault();
+            return Response(await _reportTypeService.DeleteAsync(id));
         }
     }
 }

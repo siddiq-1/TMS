@@ -37,13 +37,13 @@ namespace TMS.Service.Service
             var result = await _unitOfWork.CommitAsync();
             return HelperMethod.Commit(result);
         }
-        public async Task<IEnumerable<UserManagerMappingDto>> GetAllAsync(Expression<Func<UserManagerMapping, bool>>? filter = null,
+        public async Task<PageResult<UserManagerMappingDto>> GetAllAsync(Expression<Func<UserManagerMapping, bool>>? filter = null,
                 Func<IQueryable<UserManagerMapping>, IOrderedQueryable<UserManagerMapping>>? orderBy = null,
                 int page = 0,
                 int take = 10)
         {
             var result = await _unitOfWork.UserManagerRepository.GetAllAsync(filter, orderBy, page, take);
-            return _mapper.Map<IEnumerable<UserManagerMapping>, IEnumerable<UserManagerMappingDto>>(result);
+            return _mapper.Map<PageResult<UserManagerMapping>, PageResult<UserManagerMappingDto>>(result);
         }
         public async Task<UserManagerMappingDto> GetByIdAsync(int id)
         {

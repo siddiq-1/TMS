@@ -7,17 +7,18 @@ using System.Threading.Tasks;
 using TMS.Model;
 using TMS.ModelDTO.Task;
 using TMS.ModelDTO.User;
+using TMS.Utility;
 using Task = TMS.Model.Task;
 
 namespace TMS.Service.Interface
 {
     public interface IUserRoleMappingService
     {
-        Task<IEnumerable<UserRoleMappingDto>> GetAllAsync(Expression<Func<UserRoleMapping, bool>>? filter = null,
+        Task<PageResult<UserRoleMappingDto>> GetAllAsync(Expression<Func<UserRoleMapping, bool>>? filter = null,
                 Func<IQueryable<UserRoleMapping>, IOrderedQueryable<UserRoleMapping>>? orderBy = null,
-                int page = 0,
+                int page = 1,
                 int take = 10);
-        Task<UserRoleMappingDto> GetByIdAsync(int id);
+        Task<UserRoleMappingDto> GetRoleByUserIdAsync(int userId);
         Task<UserRoleMapping> AddAsync(UserRoleMappingDto model);
         Task<UserRoleMapping> UpdateAsync(int userId, int userRoleMappingId, UserRoleMappingDto model);
         Task<bool> DeleteAsync(int id);

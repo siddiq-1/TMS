@@ -7,118 +7,51 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TMS.Data.MODEL;
 using TMS.Model;
+using TMS.ModelDTO.Task;
+using TMS.Service.Interface;
+using TMS.Utility;
 
 namespace TMS.API.Controllers.Task
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TaskStatusController : ControllerBase
+    public class TaskStatusController : BaseApiController
     {
-        private readonly TaskManagementSystemContext _context;
+        private readonly ITaskStatusService _taskStatusService;
 
-        public TaskStatusController(TaskManagementSystemContext context)
+        public TaskStatusController(ITaskStatusService TaskStatusMasterService)
         {
-            _context = context;
+            _taskStatusService = TaskStatusMasterService;
         }
 
-        // GET: api/TaskStatus
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TaskStatusMaster>>> GetTaskStatusMasters()
+        public async Task<ServiceResponse<PageResult<TaskStatusMasterDto>>> GetTaskStatusMasters()
         {
-            if (_context.TaskStatusMasters == null)
-            {
-                return NotFound();
-            }
-            return await _context.TaskStatusMasters.ToListAsync();
+            return Response(await _taskStatusService.GetAllAsync());
         }
 
-        // GET: api/TaskStatus/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<TaskStatusMaster>> GetTaskStatusMaster(int id)
+        public async Task<ServiceResponse<TaskStatusMasterDto>> GetTaskStatusMasterById(int id)
         {
-            if (_context.TaskStatusMasters == null)
-            {
-                return NotFound();
-            }
-            var taskStatusMaster = await _context.TaskStatusMasters.FindAsync(id);
-
-            if (taskStatusMaster == null)
-            {
-                return NotFound();
-            }
-
-            return taskStatusMaster;
+            return Response(await _taskStatusService.GetByIdAsync(id));
         }
 
-        // PUT: api/TaskStatus/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTaskStatusMaster(int id, TaskStatusMaster taskStatusMaster)
+        public async Task<ServiceResponse<TaskStatusMaster>> UpdateTaskStatusMaster(int id, TaskStatusMasterDto taskStatusMaster)
         {
-            if (id != taskStatusMaster.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(taskStatusMaster).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!TaskStatusMasterExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            return Response(await _taskStatusService.UpdateAsync(userId, id, taskStatusMaster));
         }
 
-        // POST: api/TaskStatus
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<TaskStatusMaster>> PostTaskStatusMaster(TaskStatusMaster taskStatusMaster)
+        public async Task<ServiceResponse<TaskStatusMaster>> CreateTaskStatusMaster(TaskStatusMasterDto taskStatusMaster)
         {
-            if (_context.TaskStatusMasters == null)
-            {
-                return Problem("Entity set 'TaskManagementSystemContext.TaskStatusMasters'  is null.");
-            }
-            _context.TaskStatusMasters.Add(taskStatusMaster);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetTaskStatusMaster", new { id = taskStatusMaster.Id }, taskStatusMaster);
+            return Response(await _taskStatusService.AddAsync(taskStatusMaster));
         }
 
-        // DELETE: api/TaskStatus/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTaskStatusMaster(int id)
+        public async Task<ServiceResponse<bool>> DeleteTaskStatusMaster(int id)
         {
-            if (_context.TaskStatusMasters == null)
-            {
-                return NotFound();
-            }
-            var taskStatusMaster = await _context.TaskStatusMasters.FindAsync(id);
-            if (taskStatusMaster == null)
-            {
-                return NotFound();
-            }
-
-            _context.TaskStatusMasters.Remove(taskStatusMaster);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool TaskStatusMasterExists(int id)
-        {
-            return (_context.TaskStatusMasters?.Any(e => e.Id == id)).GetValueOrDefault();
+            return Response(await _taskStatusService.DeleteAsync(id));
         }
     }
 }

@@ -37,13 +37,13 @@ namespace TMS.Service.Service
             var result = await _unitOfWork.CommitAsync();
             return HelperMethod.Commit(result);
         }
-        public async Task<IEnumerable<RoleDto>> GetAllAsync(Expression<Func<Role, bool>>? filter = null,
+        public async Task<PageResult<RoleDto>> GetAllAsync(Expression<Func<Role, bool>>? filter = null,
                 Func<IQueryable<Role>, IOrderedQueryable<Role>>? orderBy = null,
-                int page = 0,
+                int page = 1,
                 int take = 10)
         {
             var result = await _unitOfWork.RoleRepository.GetAllAsync(filter, orderBy, page, take);
-            return _mapper.Map<IEnumerable<Role>, IEnumerable<RoleDto>>(result);
+            return _mapper.Map<PageResult<Role>, PageResult<RoleDto>>(result);
         }
 
         public async Task<RoleDto> GetByIdAsync(int id)

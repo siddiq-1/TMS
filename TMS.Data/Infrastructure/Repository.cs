@@ -6,6 +6,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using TMS.Data.MODEL;
+using TMS.Utility;
 
 namespace TMS.Data.Infrastructure
 {
@@ -27,9 +28,9 @@ namespace TMS.Data.Infrastructure
             _tmsContext.Entry(model).State = EntityState.Deleted;
         }
 
-        public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null,
+        public async Task<PageResult<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null,
                 Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
-                int page = 0,
+                int page = 1,
                 int take = 10)
         {
             IQueryable<T> query = _tmsContext.Set<T>();
@@ -41,8 +42,9 @@ namespace TMS.Data.Infrastructure
                 query = orderBy(query);
 
             int skip = (page - 1) * take;
-
-            return await query.Skip(skip).Take(take).ToListAsync();
+            var totalRecords = await query.CountAsync();
+            var result = await query.Skip(skip).Take(take).ToListAsync();
+            return new PageResult<T>(totalRecords, result);
         }
 
         public async Task<T> GetByIdAsync(int id)

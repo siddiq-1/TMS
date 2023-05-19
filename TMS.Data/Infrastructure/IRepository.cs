@@ -5,14 +5,15 @@ using System.Linq.Expressions;
 using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
+using TMS.Utility;
 
 namespace TMS.Data.Infrastructure
 {
     public interface IRepository<T> where T : class
     {
-        Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null,
+        Task<PageResult<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null,
                 Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
-                int skip = 0,
+                int skip = 1,
                 int take = 10);
         Task<T> GetByIdAsync(int id);
         Task AddAsync(T model);
