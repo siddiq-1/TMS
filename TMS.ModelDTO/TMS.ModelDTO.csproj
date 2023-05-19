@@ -6,4 +6,13 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Interface\**" />
+    <Compile Remove="Service\**" />
+    <EmbeddedResource Remove="Interface\**" />
+    <EmbeddedResource Remove="Service\**" />
+    <None Remove="Interface\**" />
+    <None Remove="Service\**" />
+  </ItemGroup>
+
 </Project>

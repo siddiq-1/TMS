@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using System.Configuration;
+using TMS.API.Infrastructure.Extension;
 using TMS.Data.MODEL;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,8 +12,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 var app = builder.Build();
-builder.Services.AddDbContext<TaskManagementSystemContext>(model => model.UseSqlServer(builder.Configuration.GetConnectionString("TaskManagementSystem")));
-builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.InstallAssemblyService(builder.Configuration);
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

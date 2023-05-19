@@ -7,7 +7,7 @@ using TMS.ModelDTO.User;
 
 namespace TMS.Service.Interface
 {
-    public interface IAcountService
+    public interface IAccountService
     {
         Task<string> Authentication(UserDto user);
     }

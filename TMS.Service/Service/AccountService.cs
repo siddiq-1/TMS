@@ -10,7 +10,7 @@ using TMS.Service.Interface;
 
 namespace TMS.Service.Service
 {
-    public class AccountService : IAcountService
+    public class AccountService : IAccountService
     {
         private readonly IUserService _userService;
         private readonly ITokenService _tokenService;

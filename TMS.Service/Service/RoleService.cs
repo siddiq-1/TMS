@@ -9,11 +9,12 @@ using TMS.Data.Infrastructure;
 using TMS.Model;
 using TMS.ModelDTO;
 using TMS.ModelDTO.User;
+using TMS.Service.Interface;
 using TMS.Utility;
 
 namespace TMS.Service.Service
 {
-    public class RoleService
+    public class RoleService : IRoleService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;

@@ -34,7 +34,7 @@ namespace TMS.Data.MODEL
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Data Source=DESKTOP-0V6LNT4;Initial Catalog=TaskManagementSystem;Integrated Security=True;");
+                optionsBuilder.UseSqlServer("Data Source=DESKTOP-TFBH7SV;Initial Catalog=TaskManagementSystem;Integrated Security=True;");
             }
         }
 
@@ -314,8 +314,7 @@ namespace TMS.Data.MODEL
                     .HasConstraintName("FK_UserRoleMapping_Role");
 
                 entity.HasOne(d => d.User)
-                    .WithMany(p => p.UserRoleMappings)
-                    .HasForeignKey(d => d.UserId)
+                    .WithOne(p => p.UserRoleMappings)
                     .HasConstraintName("FK_UserRoleMapping_User");
             });
 
