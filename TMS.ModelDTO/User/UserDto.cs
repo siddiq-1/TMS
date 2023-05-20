@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TMS.Model;
 
 namespace TMS.ModelDTO.User
 {
@@ -20,5 +21,6 @@ namespace TMS.ModelDTO.User
         public string? AlternateContactNo { get; set; }
         public string? Address { get; set; }
         public bool? IsActive { get; set; }
+        public string? Role { get; set; }
     }
 }

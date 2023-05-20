@@ -16,10 +16,11 @@ namespace TMS.Service.Interface
     {
         Task<PageResult<UserManagerMappingDto>> GetAllAsync(Expression<Func<UserManagerMapping, bool>>? filter = null,
               Func<IQueryable<UserManagerMapping>, IOrderedQueryable<UserManagerMapping>>? orderBy = null,
-              int page = 0,
+              int page = 1,
               int take = 10);
-        Task<UserManagerMappingDto> GetByIdAsync(int id);
-        Task<UserManagerMapping> AddAsync(UserManagerMappingDto model);
+        Task<UserManagerMappingDto> GetManagerByIdAsync(int id);
+        Task<UserManagerMappingDto> GetManagerByUserIdAsync(int id);
+        Task<UserManagerMapping> AddAsync(int loginId, UserManagerMappingDto model);
         Task<UserManagerMapping> UpdateAsync(int userId, int userManagerMappingId, UserManagerMappingDto model);
         Task<bool> DeleteAsync(int id);
         Task<UserManagerMappingDto> GetFirtOrDefaultAsync(Expression<Func<UserManagerMapping, bool>> predicate);

@@ -38,7 +38,7 @@ namespace TMS.Service.Service
         }
         public async Task<PageResult<ScheduleReportDto>> GetAllAsync(Expression<Func<ScheduleReport, bool>>? filter = null,
                 Func<IQueryable<ScheduleReport>, IOrderedQueryable<ScheduleReport>>? orderBy = null,
-                int page = 0,
+                int page = 1,
                 int take = 10)
         {
             var result = await _unitOfWork.ScheduleReportRepository.GetAllAsync(filter, orderBy, page, take);

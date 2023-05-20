@@ -21,7 +21,7 @@ namespace TMS.API.Controllers.User
         [HttpGet]
         public async Task<ServiceResponse<PageResult<UserDto>>> GetUsers()
         {
-            return Response(await _userService.GetAllAsync());
+            return Response(await _userService.GetAllAsync(u => u.UserRoleMappings.Role));
         }
 
         [HttpGet("{id}")]

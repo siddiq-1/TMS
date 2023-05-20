@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TMS.ModelDTO\TMS.ModelDTO.csproj" />
     <ProjectReference Include="..\TMS.Model\TMS.Model.csproj" />
     <ProjectReference Include="..\TMS.Utility\TMS.Utility.csproj" />
   </ItemGroup>

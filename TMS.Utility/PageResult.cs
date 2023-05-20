@@ -5,6 +5,10 @@
         public int TotalRecords { get; set; }
         public IEnumerable<T> List { get; set; }
 
+        public PageResult()
+        {
+            
+        }
         public PageResult(int totalRecords, IEnumerable<T> data)
         {
             TotalRecords = totalRecords;

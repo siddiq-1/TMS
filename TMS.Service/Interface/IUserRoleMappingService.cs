@@ -18,8 +18,9 @@ namespace TMS.Service.Interface
                 Func<IQueryable<UserRoleMapping>, IOrderedQueryable<UserRoleMapping>>? orderBy = null,
                 int page = 1,
                 int take = 10);
+        Task<UserRoleMappingDto> GetRoleByIdAsync(int id);
         Task<UserRoleMappingDto> GetRoleByUserIdAsync(int userId);
-        Task<UserRoleMapping> AddAsync(UserRoleMappingDto model);
+        Task<UserRoleMapping> AddAsync(int userId, UserRoleMappingDto model);
         Task<UserRoleMapping> UpdateAsync(int userId, int userRoleMappingId, UserRoleMappingDto model);
         Task<bool> DeleteAsync(int id);
         Task<UserRoleMappingDto> GetFirtOrDefaultAsync(Expression<Func<UserRoleMapping, bool>> predicate);

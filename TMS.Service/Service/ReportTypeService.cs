@@ -33,7 +33,7 @@ namespace TMS.Service.Service
         }
         public async Task<PageResult<ReportTypeMasterDto>> GetAllAsync(Expression<Func<ReportTypeMaster, bool>>? filter = null,
                 Func<IQueryable<ReportTypeMaster>, IOrderedQueryable<ReportTypeMaster>>? orderBy = null,
-                int page = 0,
+                int page = 1,
                 int take = 10)
         {
             var result = await _unitOfWork.ReportTypeRepository.GetAllAsync(filter, orderBy, page, take);

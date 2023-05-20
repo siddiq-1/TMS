@@ -15,7 +15,7 @@ namespace TMS.Service.Interface
     {
         Task<PageResult<RecurringJobDto>> GetAllAsync(Expression<Func<RecurringJob, bool>>? filter = null,
                 Func<IQueryable<RecurringJob>, IOrderedQueryable<RecurringJob>>? orderBy = null,
-                int page = 0,
+                int page = 1,
                 int take = 10);
         Task<RecurringJobDto> GetByIdAsync(int id);
         Task<RecurringJob> AddAsync(RecurringJobDto model);

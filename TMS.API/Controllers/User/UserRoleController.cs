@@ -23,15 +23,20 @@ namespace TMS.API.Controllers.User
         {
             return Response(await _userRoleMappingService.GetAllAsync());
         }
+        [HttpGet("{id}")]
+        public async Task<ServiceResponse<UserRoleMappingDto>> GetUserRoleMappingById(int id)
+        {
+            return Response(await _userRoleMappingService.GetRoleByIdAsync(id));
+        }
 
         [HttpGet("User/{id}")]
-        public async Task<ServiceResponse<UserRoleMappingDto>> GetUserRoleMappingById(int id)
+        public async Task<ServiceResponse<UserRoleMappingDto>> GetUserRoleMappingByUserId(int id)
         {
             return Response(await _userRoleMappingService.GetRoleByUserIdAsync(id));
         }
 
-        [HttpPut("{id}")]
-        public async Task<ServiceResponse<UserRoleMapping>> UpdateUserRoleMapping(int id, UserRoleMappingDto userRoleMapping)
+        [HttpPut("User/{id}")]
+        public async Task<ServiceResponse<UserRoleMapping>> UpdateUserRoleMappingByUserId(int id, UserRoleMappingDto userRoleMapping)
         {
             return Response(await _userRoleMappingService.UpdateAsync(userId, id, userRoleMapping));
         }
@@ -39,7 +44,7 @@ namespace TMS.API.Controllers.User
         [HttpPost]
         public async Task<ServiceResponse<UserRoleMapping>> AddUserRoleMapping(UserRoleMappingDto userRoleMapping)
         {
-            return Response(await _userRoleMappingService.AddAsync(userRoleMapping));
+            return Response(await _userRoleMappingService.AddAsync(userId, userRoleMapping));
         }
 
         [HttpDelete("{id}")]

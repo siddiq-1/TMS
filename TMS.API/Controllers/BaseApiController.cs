@@ -11,7 +11,8 @@ namespace TMS.API.Controllers
     [ApiController]
     public class BaseApiController : ControllerBase
     {
-        protected int userId => int.Parse(this.User.Claims.First(i => i.Type == "UserId").Value);
+        protected int userId => int.TryParse(this.User.Claims.FirstOrDefault(i => i.Type == "UserId")?.Value, out int value) ? value : 2;
+
         public BaseApiController()
         {
 

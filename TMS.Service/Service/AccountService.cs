@@ -25,10 +25,9 @@ namespace TMS.Service.Service
         }
         public async Task<string> Authentication(LoginDto loginDto)
         {
-            var result = await _userService.GetFirtOrDefaultAsync(model => (model.UserName == loginDto.UserName
-                                                            || model.Email == loginDto.Email)
-                                                            && model.Password == loginDto.Password);
-            var user = _mapper.Map<UserDto, User>(result);
+            var user = await _userService.GetFirtOrDefaultAsync(model => model.UserRoleMappings.Role,
+                u => u.UserName == loginDto.UserName || u.Email == loginDto.Email && u.Password == loginDto.Password);
+
             return _tokenService.GetToken(user);
         }
     }

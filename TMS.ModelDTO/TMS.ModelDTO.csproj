@@ -15,4 +15,8 @@
     <None Remove="Service\**" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\TMS.Model\TMS.Model.csproj" />
+  </ItemGroup>
+
 </Project>

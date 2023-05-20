@@ -38,7 +38,7 @@ namespace TMS.Service.Service
         }
         public async Task<PageResult<TaskStatusMasterDto>> GetAllAsync(Expression<Func<TaskStatusMaster, bool>>? filter = null,
                 Func<IQueryable<TaskStatusMaster>, IOrderedQueryable<TaskStatusMaster>>? orderBy = null,
-                int page = 0,
+                int page = 1,
                 int take = 10)
         {
             var result = await _unitOfWork.TaskStatusRepository.GetAllAsync(filter, orderBy, page, take);

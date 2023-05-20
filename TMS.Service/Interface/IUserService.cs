@@ -17,12 +17,17 @@ namespace TMS.Service.Interface
     {
         Task<PageResult<UserDto>> GetAllAsync(Expression<Func<User, bool>>? filter = null,
                 Func<IQueryable<User>, IOrderedQueryable<User>>? orderBy = null,
-                int page = 0,
+                int page = 1,
                 int take = 10);
+        Task<PageResult<UserDto>> GetAllAsync(Expression<Func<User, object>>? include = null, Expression<Func<User, bool>>? filter = null,
+              Func<IQueryable<User>, IOrderedQueryable<User>>? orderBy = null,
+              int page = 1,
+              int take = 10);
         Task<UserDto> GetByIdAsync(int id);
         Task<User> AddAsync(UserDto model);
         Task<User> UpdateAsync(int loginUserId, int userId, UserDto model);
         Task<bool> DeleteAsync(int id);
         Task<UserDto> GetFirtOrDefaultAsync(Expression<Func<User, bool>> predicate);
+        Task<User> GetFirtOrDefaultAsync(Expression<Func<User, object>> include, Expression<Func<User, bool>> predicate);
     }
 }

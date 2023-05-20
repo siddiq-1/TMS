@@ -17,7 +17,7 @@ namespace TMS.Service.Interface
     {
         Task<PageResult<TaskCategoryDto>> GetAllAsync(Expression<Func<TaskCategory, bool>>? filter = null,
                 Func<IQueryable<TaskCategory>, IOrderedQueryable<TaskCategory>>? orderBy = null,
-                int page = 0,
+                int page = 1,
                 int take = 10);
         Task<TaskCategoryDto> GetByIdAsync(int id);
         Task<TaskCategory> AddAsync(TaskCategoryDto model);

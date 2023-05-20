@@ -14,12 +14,9 @@ namespace TMS.Service.Interface
 {
     public interface ITaskAssignmentService
     {
-        Task<PageResult<TaskAssignmentDto>> GetAllAsync(Expression<Func<TaskAssignment, bool>>? filter = null,
-              Func<IQueryable<TaskAssignment>, IOrderedQueryable<TaskAssignment>>? orderBy = null,
-              int page = 0,
-              int take = 10);
+        Task<PageResult<TaskAssignmentDto>> GetAllAsync();
         Task<TaskAssignmentDto> GetByIdAsync(int id);
-        Task<TaskAssignment> AddAsync(TaskAssignmentDto model);
+        Task<TaskAssignment> AddAsync(int userId, TaskAssignmentDto model);
         Task<TaskAssignment> UpdateAsync(int userId, int taskAssignmentId, TaskAssignmentDto model);
         Task<bool> DeleteAsync(int id);
         Task<TaskAssignmentDto> GetFirtOrDefaultAsync(Expression<Func<TaskAssignment, bool>> predicate);

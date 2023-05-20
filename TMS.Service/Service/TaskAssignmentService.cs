@@ -23,9 +23,11 @@ namespace TMS.Service.Service
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-        public async Task<TaskAssignment> AddAsync(TaskAssignmentDto model)
+        public async Task<TaskAssignment> AddAsync(int userId, TaskAssignmentDto model)
         {
             var taskAssignment = _mapper.Map<TaskAssignmentDto, TaskAssignment>(model);
+            taskAssignment.ModifiedBy = userId;
+            taskAssignment.CreatedBy = userId;
             await _unitOfWork.TaskAssignmentRepository.AddAsync(taskAssignment);
             await _unitOfWork.CommitAsync();
             return taskAssignment;
@@ -39,7 +41,7 @@ namespace TMS.Service.Service
         }
         public async Task<PageResult<TaskAssignmentDto>> GetAllAsync(Expression<Func<TaskAssignment, bool>>? filter = null,
                 Func<IQueryable<TaskAssignment>, IOrderedQueryable<TaskAssignment>>? orderBy = null,
-                int page = 0,
+                int page = 1,
                 int take = 10)
         {
             var result = await _unitOfWork.TaskAssignmentRepository.GetAllAsync(filter, orderBy, page, take);

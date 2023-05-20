@@ -15,7 +15,7 @@ namespace TMS.Service.Interface
     {
         Task<PageResult<TaskStatusMasterDto>> GetAllAsync(Expression<Func<TaskStatusMaster, bool>>? filter = null,
                   Func<IQueryable<TaskStatusMaster>, IOrderedQueryable<TaskStatusMaster>>? orderBy = null,
-                  int page = 0,
+                  int page = 1,
                   int take = 10);
         Task<TaskStatusMasterDto> GetByIdAsync(int id);
         Task<TaskStatusMaster> AddAsync(TaskStatusMasterDto model);

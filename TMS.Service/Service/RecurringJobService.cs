@@ -39,7 +39,7 @@ namespace TMS.Service.Service
         }
         public async Task<PageResult<RecurringJobDto>> GetAllAsync(Expression<Func<RecurringJob, bool>>? filter = null,
                 Func<IQueryable<RecurringJob>, IOrderedQueryable<RecurringJob>>? orderBy = null,
-                int page = 0,
+                int page = 1,
                 int take = 10)
         {
             var result = await _unitOfWork.RecurringJobRepository.GetAllAsync(filter, orderBy, page, take);

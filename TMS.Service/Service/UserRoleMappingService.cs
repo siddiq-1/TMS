@@ -22,11 +22,16 @@ namespace TMS.Service.Service
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-        public async Task<UserRoleMapping> AddAsync(UserRoleMappingDto model)
+        public async Task<UserRoleMapping> AddAsync(int userId, UserRoleMappingDto model)
         {
-            var userRoleMapping = _mapper.Map<UserRoleMappingDto, UserRoleMapping>(model);
+            var userRoleMapping = new UserRoleMapping();
+
+            userRoleMapping = _mapper.Map<UserRoleMappingDto, UserRoleMapping>(model);
+            userRoleMapping.CreatedBy = userId;
+            userRoleMapping.ModifiedBy = userId;
             await _unitOfWork.UserRoleMappingRepository.AddAsync(userRoleMapping);
             await _unitOfWork.CommitAsync();
+
             return userRoleMapping;
         }
         public async Task<bool> DeleteAsync(int id)
@@ -46,7 +51,12 @@ namespace TMS.Service.Service
         }
         public async Task<UserRoleMappingDto> GetRoleByUserIdAsync(int userId)
         {
-            var result = await _unitOfWork.UserRoleMappingRepository.GetFirtOrDefaultAsync(u => u.UserId == userId);
+            var result = await _unitOfWork.UserRoleMappingRepository.GetByUserIdAsync(u => u.UserId == userId);
+            return _mapper.Map<UserRoleMapping, UserRoleMappingDto>(result);
+        }
+        public async Task<UserRoleMappingDto> GetRoleByIdAsync(int id)
+        {
+            var result = await _unitOfWork.UserRoleMappingRepository.GetByIdAsync(id);
             return _mapper.Map<UserRoleMapping, UserRoleMappingDto>(result);
         }
 
@@ -55,13 +65,13 @@ namespace TMS.Service.Service
             var result = await _unitOfWork.UserRoleMappingRepository.GetFirtOrDefaultAsync(predicate);
             return _mapper.Map<UserRoleMapping, UserRoleMappingDto>(result);
         }
-        public async Task<UserRoleMapping> UpdateAsync(int userId, int userRoleMappingId, UserRoleMappingDto model)
+        public async Task<UserRoleMapping> UpdateAsync(int loginId, int id, UserRoleMappingDto model)
         {
-            var userRoleMapping = await _unitOfWork.UserRoleMappingRepository.GetByIdAsync(userRoleMappingId);
+            var userRoleMapping = await _unitOfWork.UserRoleMappingRepository.GetByIdAsync(id);
             userRoleMapping.UserId = model.UserId;
             userRoleMapping.RoleId = model.RoleId;
             userRoleMapping.ModifiedDate = DateTime.UtcNow;
-            userRoleMapping.ModifiedBy = userId;
+            userRoleMapping.ModifiedBy = loginId;
             userRoleMapping.IsActive = model.IsActive;
             _unitOfWork.UserRoleMappingRepository.Update(userRoleMapping);
             await _unitOfWork.CommitAsync();

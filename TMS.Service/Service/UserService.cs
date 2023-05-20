@@ -38,10 +38,18 @@ namespace TMS.Service.Service
         }
         public async Task<PageResult<UserDto>> GetAllAsync(Expression<Func<User, bool>>? filter = null,
                 Func<IQueryable<User>, IOrderedQueryable<User>>? orderBy = null,
-                int page = 0,
+                int page = 1,
                 int take = 10)
         {
             var result = await _unitOfWork.UserRepository.GetAllAsync(filter, orderBy, page, take);
+            return _mapper.Map<PageResult<User>, PageResult<UserDto>>(result);
+        }
+        public async Task<PageResult<UserDto>> GetAllAsync(Expression<Func<User, object>>? include = null, Expression<Func<User, bool>>? filter = null,
+        Func<IQueryable<User>, IOrderedQueryable<User>>? orderBy = null,
+        int page = 1,
+        int take = 10)
+        {
+            var result = await _unitOfWork.UserRepository.GetAllAsync(include,filter, orderBy, page, take);
             return _mapper.Map<PageResult<User>, PageResult<UserDto>>(result);
         }
         public async Task<UserDto> GetByIdAsync(int id)
@@ -55,6 +63,13 @@ namespace TMS.Service.Service
             var result = await _unitOfWork.UserRepository.GetFirtOrDefaultAsync(predicate);
             return _mapper.Map<User, UserDto>(result);
         }
+
+        public async Task<User> GetFirtOrDefaultAsync(Expression<Func<User, object>> include, Expression<Func<User, bool>> predicate)
+        {
+            var result = await _unitOfWork.UserRepository.GetFirtOrDefaultAsync(include, predicate);
+            return result;
+        }
+
         public async Task<User> UpdateAsync(int loginUserId, int userId, UserDto model)
         {
             var user = await _unitOfWork.UserRepository.GetByIdAsync(userId);

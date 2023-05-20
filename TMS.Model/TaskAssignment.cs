@@ -15,7 +15,7 @@ namespace TMS.Model
         public DateTime ModifiedDate { get; set; }
         public int CreatedBy { get; set; }
         public int ModifiedBy { get; set; }
-        public bool? IsActive { get; set; }
+        public bool IsActive { get; set; }
 
         public virtual User AssignedByNavigation { get; set; } = null!;
         public virtual User AssignedToNavigation { get; set; } = null!;

@@ -38,7 +38,7 @@ namespace TMS.Service.Service
         }
         public async Task<PageResult<TaskCategoryDto>> GetAllAsync(Expression<Func<TaskCategory, bool>>? filter = null,
                 Func<IQueryable<TaskCategory>, IOrderedQueryable<TaskCategory>>? orderBy = null,
-                int page = 0,
+                int page = 1,
                 int take = 10)
         {
             var result = await _unitOfWork.TaskCategoryRepository.GetAllAsync(filter, orderBy, page, take);

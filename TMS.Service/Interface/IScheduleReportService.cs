@@ -16,7 +16,7 @@ namespace TMS.Service.Interface
     {
         Task<PageResult<ScheduleReportDto>> GetAllAsync(Expression<Func<ScheduleReport, bool>>? filter = null,
                            Func<IQueryable<ScheduleReport>, IOrderedQueryable<ScheduleReport>>? orderBy = null,
-                           int page = 0,
+                           int page = 1,
                            int take = 10);
         Task<ScheduleReportDto> GetByIdAsync(int id);
         Task<ScheduleReport> AddAsync(ScheduleReportDto model);

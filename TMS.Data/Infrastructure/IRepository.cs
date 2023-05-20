@@ -15,10 +15,16 @@ namespace TMS.Data.Infrastructure
                 Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
                 int skip = 1,
                 int take = 10);
+        Task<PageResult<T>> GetAllAsync(Expression<Func<T, object>>? include = null, Expression<Func<T, bool>>? filter = null,
+               Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
+               int skip = 1,
+               int take = 10);
         Task<T> GetByIdAsync(int id);
+        Task<T> GetByUserIdAsync(Expression<Func<T, bool>> predicate);
         Task AddAsync(T model);
         void Update(T model);
         void Delete(T model);
         Task<T> GetFirtOrDefaultAsync(Expression<Func<T, bool>> predicate);
+        Task<T> GetFirtOrDefaultAsync(Expression<Func<T, object>>? include = null, Expression<Func<T, bool>>? predicate = null);
     }
 }

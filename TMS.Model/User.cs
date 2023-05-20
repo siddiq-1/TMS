@@ -24,7 +24,7 @@ namespace TMS.Model
         public string? ContactNo { get; set; }
         public string? AlternateContactNo { get; set; }
         public string? Address { get; set; }
-        public bool? IsActive { get; set; }
+        public bool IsActive { get; set; }
 
         public virtual ICollection<ScheduleReport> ScheduleReports { get; set; }
         public virtual ICollection<TaskAssignment> TaskAssignmentAssignedByNavigations { get; set; }

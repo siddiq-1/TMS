@@ -16,7 +16,7 @@ namespace TMS.Service.Interface
     {
         Task<PageResult<RoleDto>> GetAllAsync(Expression<Func<Role, bool>>? filter = null,
                       Func<IQueryable<Role>, IOrderedQueryable<Role>>? orderBy = null,
-                      int page = 0,
+                      int page = 1,
                       int take = 10);
         Task<RoleDto> GetByIdAsync(int id);
         Task<Role> AddAsync(RoleDto model);
