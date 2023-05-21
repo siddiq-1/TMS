@@ -1,6 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -27,7 +29,6 @@ namespace TMS.Data.Infrastructure
         {
             _tmsContext.Entry(model).State = EntityState.Deleted;
         }
-
         public async Task<PageResult<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null,
                 Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
                 int page = 1,
@@ -71,6 +72,11 @@ namespace TMS.Data.Infrastructure
         {
             var dbSet = _tmsContext.Set<T>();
             return await dbSet.FindAsync(id);
+        }
+        public async Task<T> GetByNameAsync(Expression<Func<T, bool>> predicate)
+        {
+            var dbSet = _tmsContext.Set<T>();
+            return await dbSet.FirstOrDefaultAsync(predicate);
         }
 
         public async Task<T> GetByUserIdAsync(Expression<Func<T, bool>> predicate)

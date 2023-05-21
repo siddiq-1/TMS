@@ -39,13 +39,9 @@ namespace TMS.Service.Service
             var result = await _unitOfWork.CommitAsync();
             return HelperMethod.Commit(result);
         }
-        public async Task<PageResult<TaskAssignmentDto>> GetAllAsync(Expression<Func<TaskAssignment, bool>>? filter = null,
-                Func<IQueryable<TaskAssignment>, IOrderedQueryable<TaskAssignment>>? orderBy = null,
-                int page = 1,
-                int take = 10)
+        public async Task<PageResult<TaskInfoData>> GetTaskListAsync()
         {
-            var result = await _unitOfWork.TaskAssignmentRepository.GetAllAsync(filter, orderBy, page, take);
-            return _mapper.Map<PageResult<TaskAssignment>, PageResult<TaskAssignmentDto>>(result);
+            return await _unitOfWork.TaskAssignmentRepository.GetTaskListAsync();
         }
         public async Task<TaskAssignmentDto> GetByIdAsync(int id)
         {
@@ -58,9 +54,9 @@ namespace TMS.Service.Service
             var result = await _unitOfWork.TaskAssignmentRepository.GetFirtOrDefaultAsync(predicate);
             return _mapper.Map<TaskAssignment, TaskAssignmentDto>(result);
         }
-        public async Task<TaskAssignment> UpdateAsync(int userId, int TaskAssignmentId, TaskAssignmentDto model)
+        public async Task<TaskAssignment> UpdateAsync(int userId, int taskAssignmentId, TaskAssignmentDto model)
         {
-            var taskAssignment = await _unitOfWork.TaskAssignmentRepository.GetByIdAsync(TaskAssignmentId);
+            var taskAssignment = await _unitOfWork.TaskAssignmentRepository.GetByIdAsync(taskAssignmentId);
             taskAssignment.AssignedBy = model.AssignedBy;
             taskAssignment.AssignedTo = model.AssignedTo;
             taskAssignment.StatusId = model.StatusId;

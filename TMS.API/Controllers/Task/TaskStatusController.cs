@@ -45,7 +45,7 @@ namespace TMS.API.Controllers.Task
         [HttpPost]
         public async Task<ServiceResponse<TaskStatusMaster>> CreateTaskStatusMaster(TaskStatusMasterDto taskStatusMaster)
         {
-            return Response(await _taskStatusService.AddAsync(taskStatusMaster));
+            return Response(await _taskStatusService.AddAsync(userId, taskStatusMaster));
         }
 
         [HttpDelete("{id}")]

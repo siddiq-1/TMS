@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Configuration;
 using TMS.API.Infrastructure.Extension;
+using TMS.API.Infrastructure.Middleware;
 using TMS.Data.MODEL;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,7 +22,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+//app.UseMiddleware<TokenBlacklistMiddleware>();
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

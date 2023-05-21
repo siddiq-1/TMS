@@ -20,7 +20,8 @@ namespace TMS.API.Infrastructure.Automapper
             CreateMap<TaskAssignment, TaskAssignmentDto>().ReverseMap();
             CreateMap<TaskCategory, TaskCategoryDto>().ReverseMap();
             CreateMap<TaskStatusMaster, TaskStatusMasterDto>().ReverseMap();
-            CreateMap<User, UserDto>().ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.UserRoleMappings.Role.Name)).ReverseMap();
+            CreateMap<User, UserDto>().ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.UserRoleMappings.Role.Name));
+            CreateMap<UserDto, User>().ForMember(dest => dest.UserRoleMappings , opt => opt.Ignore());
             CreateMap<UserManagerMapping, UserManagerMappingDto>().ReverseMap();
             CreateMap<UserRoleMapping, UserRoleMappingDto>().ReverseMap();
 

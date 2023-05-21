@@ -1,4 +1,5 @@
-﻿using TMS.Service.Interface;
+﻿using StackExchange.Redis;
+using TMS.Service.Interface;
 using TMS.Service.Service;
 
 namespace TMS.API.Infrastructure.Installer
@@ -19,6 +20,13 @@ namespace TMS.API.Infrastructure.Installer
             service.AddTransient<IUserManagerService, UserManagerService>();
             service.AddTransient<IUserRoleMappingService, UserRoleMappingService>();
             service.AddTransient<IUserService, UserService>();
+            service.AddTransient<ITaskService, TaskService>();
+
+            service.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = "localhost:7121";
+            });
+            service.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect("localhost:7121"));
         }
     }
 }

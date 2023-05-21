@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using TMS.Model;
+using TMS.Utility;
 using Task = TMS.Model.Task;
 
 namespace TMS.Data.MODEL
@@ -34,7 +36,7 @@ namespace TMS.Data.MODEL
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Data Source=DESKTOP-TFBH7SV;Initial Catalog=TaskManagement;Integrated Security=True;");
+                optionsBuilder.UseSqlServer("Data Source=DESKTOP-0V6LNT4;Initial Catalog=TaskManagementSystem;Integrated Security=True;");
             }
         }
 

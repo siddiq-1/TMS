@@ -24,7 +24,7 @@ namespace TMS.Service.Interface
               int page = 1,
               int take = 10);
         Task<UserDto> GetByIdAsync(int id);
-        Task<User> AddAsync(UserDto model);
+        Task<User> AddAsync(int userId, UserDto model);
         Task<User> UpdateAsync(int loginUserId, int userId, UserDto model);
         Task<bool> DeleteAsync(int id);
         Task<UserDto> GetFirtOrDefaultAsync(Expression<Func<User, bool>> predicate);

@@ -22,10 +22,21 @@ namespace TMS.Service.Service
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-        public async Task<User> AddAsync(UserDto model)
+        public async Task<User> AddAsync(int userId, UserDto model)
         {
             var user = _mapper.Map<UserDto, User>(model);
             await _unitOfWork.UserRepository.AddAsync(user);
+            await _unitOfWork.CommitAsync();
+
+            var role = await _unitOfWork.RoleRepository.GetByNameAsync(n => n.Name == model.Role);
+            var userRole = new UserRoleMapping()
+            {
+                UserId = user.Id,
+                RoleId = role.Id,
+                CreatedBy = userId,
+                ModifiedBy = userId,
+            };
+            await _unitOfWork.UserRoleMappingRepository.AddAsync(userRole);
             await _unitOfWork.CommitAsync();
             return user;
         }

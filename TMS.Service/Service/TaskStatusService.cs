@@ -22,9 +22,11 @@ namespace TMS.Service.Service
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-        public async Task<TaskStatusMaster> AddAsync(TaskStatusMasterDto model)
+        public async Task<TaskStatusMaster> AddAsync(int userId, TaskStatusMasterDto model)
         {
             var taskStatusMaster = _mapper.Map<TaskStatusMasterDto, TaskStatusMaster>(model);
+            taskStatusMaster.CreatedBy = userId;
+            taskStatusMaster.ModifiedBy = userId;
             await _unitOfWork.TaskStatusRepository.AddAsync(taskStatusMaster);
             await _unitOfWork.CommitAsync();
             return taskStatusMaster;

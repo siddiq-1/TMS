@@ -18,7 +18,7 @@ namespace TMS.Service.Interface
                   int page = 1,
                   int take = 10);
         Task<TaskStatusMasterDto> GetByIdAsync(int id);
-        Task<TaskStatusMaster> AddAsync(TaskStatusMasterDto model);
+        Task<TaskStatusMaster> AddAsync(int userId ,TaskStatusMasterDto model);
         Task<TaskStatusMaster> UpdateAsync(int userId, int taskStatusMasterId, TaskStatusMasterDto model);
         Task<bool> DeleteAsync(int id);
         Task<TaskStatusMasterDto> GetFirtOrDefaultAsync(Expression<Func<TaskStatusMaster, bool>> predicate);

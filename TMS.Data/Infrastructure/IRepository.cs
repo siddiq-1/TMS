@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Data.SqlClient;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -20,6 +21,7 @@ namespace TMS.Data.Infrastructure
                int skip = 1,
                int take = 10);
         Task<T> GetByIdAsync(int id);
+        Task<T> GetByNameAsync(Expression<Func<T, bool>> predicate);
         Task<T> GetByUserIdAsync(Expression<Func<T, bool>> predicate);
         Task AddAsync(T model);
         void Update(T model);

@@ -7,7 +7,7 @@ using TMS.Model;
 
 namespace TMS.ModelDTO.User
 {
-    public class UserDto
+    public class UserWithRoles
     {
         public int Id { get; set; }
         public string UserName { get; set; } = null!;

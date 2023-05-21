@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,30 +16,21 @@ namespace TMS.Data.Repositories.Repository
 {
     public class TaskAssignmentRepository : Repository<TaskAssignment>, ITaskAssignmentRepository
     {
-        private readonly TaskManagementSystemContext _tmsContext;
         public TaskAssignmentRepository(TaskManagementSystemContext tmsContext) : base(tmsContext)
         {
-            _tmsContext = tmsContext;
         }
 
-        public async PageResult<TaskInfoData> GetAllAsync()
+        public async Task<PageResult<TaskInfoData>> GetTaskListAsync()
         {
-            return await (from tms in _tmsContext.TaskAssignments
-                          join t in _tmsContext.Tasks on tms.TaskId equals t.Id
-                          join tc in _tmsContext.TaskCategories on tms.CategoryId equals tc.Id
-                          join ts in _tmsContext.TaskStatusMasters on tms.StatusId equals ts.Id
-                          join at in _tmsContext.Users on tms.AssignedBy equals at.Id
-                          join ab in _tmsContext.Users on tms.AssignedTo equals ab.Id
-                          where tms.IsActive && tc.IsActive && ts.IsActive && at.IsActive && ab.IsActive
-                          select new TaskInfoData
-                          {
-                              Id = tms.Id,
-                              Name = t.Title,
-                              AssignedBy = at.UserName,
-                              AssignedTo = ab.UserName,
-                              Category = tc.Name,
-                              Status = ts.Status
-                          }).ToListAsync();
+            int totalRecords = 0;
+            var totalRecordsParameter = DataProvider.GetIntSqlParameter("@TotalRecords", totalRecords, true);
+            var parameters = new List<SqlParameter>()
+            {
+                totalRecordsParameter
+            };
+            var result = await SQLHelper.ExecuteStoredProcedureAsync<TaskInfoData>("USP_ViewTaskList", parameters);
+            totalRecords = Convert.IsDBNull(totalRecordsParameter.Value) ? 0 : Convert.ToInt32(totalRecordsParameter.Value);
+            return new PageResult<TaskInfoData>(totalRecords, result);
         }
     }
 }
