@@ -21,16 +21,13 @@ namespace TMS.API.Controllers
     {
         private readonly IAccountService _accountService;
         private readonly IUserService _userService;
-        private readonly IDistributedCache _cache;
-        private IConnectionMultiplexer _connectionMultiplexer;
+        private readonly IRedisCache _redisCache;
 
-
-        public AccountController(IAccountService accountService, IUserService userService, IDistributedCache cache, IConnectionMultiplexer connectionMultiplexer)
+        public AccountController(IAccountService accountService, IUserService userService, IRedisCache redisCache)
         {
             _accountService = accountService;
             _userService = userService;
-            _cache = cache;
-            _connectionMultiplexer = connectionMultiplexer;
+            _redisCache = redisCache;
         }
 
         [HttpPost("Authenticate")]
@@ -48,8 +45,7 @@ namespace TMS.API.Controllers
         [HttpPost("User/Logout")]
         public async Task<ServiceResponse<bool>> Logout(string token)
         {
-            IDatabase redisDb = _connectionMultiplexer.GetDatabase();
-            await redisDb.SetAddAsync("tokenBlacklist", token);
+            await _redisCache.SetCacheValueAsync("BlackListedToken", token);
             return Response(true);
         }
     }

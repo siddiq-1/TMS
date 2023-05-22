@@ -22,11 +22,9 @@ namespace TMS.API.Infrastructure.Installer
             service.AddTransient<IUserService, UserService>();
             service.AddTransient<ITaskService, TaskService>();
 
-            service.AddStackExchangeRedisCache(options =>
-            {
-                options.Configuration = "localhost:7121";
-            });
-            service.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect("localhost:7121"));
+            service.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(configuration["RedisConnection"]));
+            service.AddSingleton<IRedisCache, RedisCache>();
+
         }
     }
 }

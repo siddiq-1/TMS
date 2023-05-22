@@ -27,7 +27,6 @@ namespace TMS.Service.Service
             {
                 new Claim("UserId",user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.NameId , user.UserName),
-                new Claim(ClaimTypes.Email , user.Email),
                 new Claim(ClaimTypes.Role, user.UserRoleMappings.Role.Name)
             };
             var credentials = new SigningCredentials(_key, SecurityAlgorithms.HmacSha256);

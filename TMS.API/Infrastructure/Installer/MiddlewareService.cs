@@ -6,7 +6,7 @@ namespace TMS.API.Infrastructure.Installer
     {
         public void InstallService(IServiceCollection service, IConfiguration configuration)
         {
-            service.AddTransient<TokenBlacklistMiddleware>();
+            service.AddScoped<TokenBlacklistMiddleware>();
         }
     }
 }

@@ -12,9 +12,22 @@ namespace TMS.API.Infrastructure.Automapper
     {
         public MapProfile()
         {
-            CreateMap<RecurringJob, RecurringJobDto>().ReverseMap();
+            CreateMap<RecurringJob, RecurringJobDto>()
+                .ForMember(dest => dest.CreatedDate, opt => opt.Ignore())
+                .ForMember(dest => dest.ModifiedDate, opt => opt.Ignore())
+                .ForMember(dest => dest.CreatedBy, opt => opt.Ignore())
+                .ForMember(dest => dest.ModifiedBy, opt => opt.Ignore())
+                .ReverseMap();
+
+            CreateMap<Role, RoleDto>()
+              .ForMember(dest => dest.CreatedDate, opt => opt.Ignore())
+              .ForMember(dest => dest.ModifiedDate, opt => opt.Ignore())
+              .ForMember(dest => dest.CreatedBy, opt => opt.Ignore())
+              .ForMember(dest => dest.ModifiedBy, opt => opt.Ignore())
+              .ReverseMap();
+
             CreateMap<ReportTypeMaster, ReportTypeMasterDto>().ReverseMap();
-            CreateMap<Role, RoleDto>().ReverseMap();
+            
             CreateMap<ScheduleReport, ScheduleReportDto>().ReverseMap();
             CreateMap<Task, TaskDto>().ReverseMap();
             CreateMap<TaskAssignment, TaskAssignmentDto>().ReverseMap();

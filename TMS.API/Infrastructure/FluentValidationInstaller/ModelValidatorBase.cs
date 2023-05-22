@@ -12,15 +12,9 @@ namespace TMS.API.Infrastructure.FluentValidationInstaller
             var properties = typeof(T).GetProperties();
             foreach (var property in properties)
             {
-                RuleFor(GetPropertyExpression(property))
+                RuleFor(x => property.GetValue(x))
                     .NotEmpty().WithMessage($"{property.Name} is Required");
             }
-        }
-        private Expression<Func<T, object>> GetPropertyExpression(PropertyInfo property)
-        {
-            var parameter = Expression.Parameter(typeof(T));
-            var propertyAccess = Expression.Property(parameter, property);
-            return Expression.Lambda<Func<T, object>>(propertyAccess, parameter);
         }
     }
 }
