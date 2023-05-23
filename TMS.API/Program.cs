@@ -12,7 +12,6 @@ var builder = WebApplication.CreateBuilder(args);
 // AddAsync services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.InstallAssemblyService(builder.Configuration);
@@ -26,12 +25,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseMiddleware<TokenBlacklistMiddleware>();
-
 app.UseMiddleware<FluentValidationMiddleware<RoleDto>>();
 app.UseMiddleware<FluentValidationMiddleware<TaskAssignmentDto>>();
 app.UseMiddleware<FluentValidationMiddleware<TaskCategoryDto>>();
 app.UseMiddleware<FluentValidationMiddleware<TaskDto>>();
-app.UseMiddleware<FluentValidationMiddleware<TaskInfoData>>();
 app.UseMiddleware<FluentValidationMiddleware<TaskStatusMasterDto>>();
 app.UseMiddleware<FluentValidationMiddleware<UserDto>>();
 app.UseMiddleware<FluentValidationMiddleware<UserManagerMappingDto>>();
@@ -40,6 +37,7 @@ app.UseMiddleware<FluentValidationMiddleware<LoginDto>>();
 app.UseMiddleware<FluentValidationMiddleware<RecurringJobDto>>();
 app.UseMiddleware<FluentValidationMiddleware<ReportTypeMasterDto>>();
 app.UseMiddleware<FluentValidationMiddleware<ScheduleReportDto>>();
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseAuthentication();
 app.UseAuthorization();

@@ -25,6 +25,7 @@ namespace TMS.Service.Service
         public async Task<User> AddAsync(int userId, UserDto model)
         {
             var user = _mapper.Map<UserDto, User>(model);
+            user.Password = HelperMethod.GetHashPassword(user.Password);
             await _unitOfWork.UserRepository.AddAsync(user);
             await _unitOfWork.CommitAsync();
 

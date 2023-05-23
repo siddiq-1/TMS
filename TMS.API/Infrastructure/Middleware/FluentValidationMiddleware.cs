@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
+using System.Text;
 using TMS.Utility;
 
 namespace TMS.API.Infrastructure.Middleware
@@ -13,15 +14,17 @@ namespace TMS.API.Infrastructure.Middleware
         }
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
-            var model = await RequestBodyAsync(context.Request);
-
-            var validateResult = await _validator.ValidateAsync(model);
-            if (!validateResult.IsValid)
+            if (context.Request.Method == "POST")
             {
-                var errors = validateResult.Errors.Select(x => x.ErrorMessage);
-                context.Response.StatusCode = 400;
-                await context.Response.WriteAsync(string.Join(Environment.NewLine, errors));
-                return;
+                var model = await RequestBodyAsync(context.Request);
+
+                var validateResult = await _validator.ValidateAsync(model);
+                if (!validateResult.IsValid)
+                {
+                    var errors = validateResult.Errors.Select(x => x.ErrorMessage);
+                    await HelperMethod.HandleModelValidation(context, errors);
+                    return;
+                }
             }
             await next(context);
         }

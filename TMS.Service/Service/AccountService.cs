@@ -8,6 +8,7 @@ using TMS.Model;
 using TMS.ModelDTO;
 using TMS.ModelDTO.User;
 using TMS.Service.Interface;
+using TMS.Utility;
 
 namespace TMS.Service.Service
 {
@@ -24,9 +25,15 @@ namespace TMS.Service.Service
         public async Task<string> Authentication(LoginDto loginDto)
         {
             var user = await _userService.GetFirtOrDefaultAsync(model => model.UserRoleMappings.Role,
-                u => u.UserName == loginDto.UserName && u.Password == loginDto.Password);
+                u => u.UserName == loginDto.UserName);
 
-            return _tokenService.GetToken(user);
+            if (user == null)
+            {
+                return "User Not Found";
+            }
+
+            var isVerified = HelperMethod.VerifyHashPassword(loginDto.Password, user.Password);
+            return isVerified ? _tokenService.GetToken(user) : "Invalid Credentials";
         }
     }
 }
