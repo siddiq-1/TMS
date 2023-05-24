@@ -74,7 +74,7 @@ namespace TMS.API.Infrastructure.Automapper
             .ForMember(dest => dest.CreatedBy, opt => opt.Ignore())
              .ForMember(dest => dest.ModifyBy, opt => opt.Ignore())
              .ForMember(dest => dest.ModifiedDate, opt => opt.Ignore())
-              .ForMember(dest => dest.CreatedDate, opt => opt.Ignore()).ReverseMap();
+              .ForMember(dest => dest.CreatedDate, opt => opt.Ignore());
 
             CreateMap<UserManagerMappingDto, UserManagerMapping>()
            .ForMember(dest => dest.CreatedDate, opt => opt.Ignore())

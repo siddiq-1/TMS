@@ -38,7 +38,6 @@ namespace TMS.API.Controllers.Task
             return Response(await _taskAssignmentService.UpdateAsync(userId, taskAssignment));
         }
 
-
         [HttpDelete("{id}")]
         public async Task<ServiceResponse<bool>> DeleteTaskListById(int id)
         {
