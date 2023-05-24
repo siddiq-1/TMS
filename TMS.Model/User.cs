@@ -24,6 +24,10 @@ namespace TMS.Model
         public string? ContactNo { get; set; }
         public string? AlternateContactNo { get; set; }
         public string? Address { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public int CreatedBy { get; set; }
+        public DateTime ModifiedDate { get; set; }
+        public int ModifyBy { get; set; }
         public bool IsActive { get; set; }
 
         public virtual ICollection<ScheduleReport> ScheduleReports { get; set; }

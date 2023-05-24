@@ -24,6 +24,16 @@ namespace TMS.Data.Infrastructure
             var dbSet = _tmsContext.Set<T>();
             await dbSet.AddAsync(model);
         }
+        public async Task AddRangeAsync(List<T> model)
+        {
+            var dbSet = _tmsContext.Set<T>();
+            await dbSet.AddRangeAsync(model);
+        }
+        public async Task UpdateRangeAsync(List<T> model)
+        {
+            var dbSet = _tmsContext.Set<T>();
+            dbSet.UpdateRange(model);
+        }
 
         public void Delete(T model)
         {

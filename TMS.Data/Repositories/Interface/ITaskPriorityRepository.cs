@@ -2,15 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using TMS.Data.Infrastructure;
 using TMS.Model;
-using TMS.ModelDTO.Task;
-using TMS.Utility;
-using Task = TMS.Model.Task;
 
 namespace TMS.Data.Repositories.Interface
 {
-    public interface ITaskRepository : IRepository<Task>
+    public interface ITaskPriorityRepository : IRepository<TaskPriorityTypeMaster>
     {
     }
 }

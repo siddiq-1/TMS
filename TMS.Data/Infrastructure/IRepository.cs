@@ -24,6 +24,8 @@ namespace TMS.Data.Infrastructure
         Task<T> GetByNameAsync(Expression<Func<T, bool>> predicate);
         Task<T> GetByUserIdAsync(Expression<Func<T, bool>> predicate);
         Task AddAsync(T model);
+        Task AddRangeAsync(List<T> model);
+        Task UpdateRangeAsync(List<T> model);
         void Update(T model);
         void Delete(T model);
         Task<T> GetFirtOrDefaultAsync(Expression<Func<T, bool>> predicate);

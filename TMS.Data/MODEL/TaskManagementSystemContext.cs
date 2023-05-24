@@ -31,6 +31,7 @@ namespace TMS.Data.MODEL
         public virtual DbSet<User> Users { get; set; } = null!;
         public virtual DbSet<UserManagerMapping> UserManagerMappings { get; set; } = null!;
         public virtual DbSet<UserRoleMapping> UserRoleMappings { get; set; } = null!;
+        public virtual DbSet<TaskPriorityTypeMaster> TaskPriorityTypes { get; set; } = null!;
         public virtual DbSet<ExceptionLog> ExceptionLogs { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

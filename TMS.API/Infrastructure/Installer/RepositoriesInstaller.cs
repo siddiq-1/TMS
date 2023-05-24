@@ -18,6 +18,7 @@ namespace TMS.API.Infrastructure.Installer
             service.AddTransient(typeof(IUserManagerRepository), typeof(UserManagerRepository));
             service.AddTransient(typeof(IUserRoleMappingRepository), typeof(UserRoleMappingRepository));
             service.AddTransient(typeof(IUserRepository), typeof(UserRepository));
+            service.AddTransient(typeof(ITaskPriorityRepository), typeof(TaskPriorityRepository));
         }
     }
 }

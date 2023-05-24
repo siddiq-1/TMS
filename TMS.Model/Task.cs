@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TMS.Model
 {
@@ -13,6 +14,8 @@ namespace TMS.Model
         public int Id { get; set; }
         public string Title { get; set; } = null!;
         public string? Description { get; set; }
+        public DateTime DueDate { get; set; } = DateTime.UtcNow;
+        public int Priority { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
         public int CreatedBy { get; set; }
@@ -20,5 +23,6 @@ namespace TMS.Model
         public bool? IsActive { get; set; }
 
         public virtual ICollection<TaskAssignment> TaskAssignments { get; set; }
+        public virtual TaskPriorityTypeMaster TaskPriority { get; set; }
     }
 }

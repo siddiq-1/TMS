@@ -21,6 +21,7 @@ namespace TMS.API.Infrastructure.Installer
             service.AddTransient<IUserRoleMappingService, UserRoleMappingService>();
             service.AddTransient<IUserService, UserService>();
             service.AddTransient<ITaskService, TaskService>();
+            service.AddTransient<ITaskPriorityService, TaskPrioritiesService>();
 
             service.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(configuration["RedisConnection"]));
             service.AddSingleton<IRedisCache, RedisCache>();

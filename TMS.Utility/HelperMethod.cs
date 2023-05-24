@@ -102,5 +102,9 @@ namespace TMS.Utility
         {
             return BCrypt.Net.BCrypt.Verify(password, hashedPassword);
         }
+        public static List<int> SplitString(string data)
+        {
+            return data.Split(',').Where(x => !string.IsNullOrWhiteSpace(x)).Select(int.Parse).ToList();
+        }
     }
 }

@@ -20,6 +20,7 @@ namespace TMS.Data.Infrastructure
         ITaskStatusRepository TaskStatusRepository { get; }
         IUserRepository UserRepository { get; }
 
+        ITaskPriorityRepository TaskPriorityRepository { get; }
         IUserRoleMappingRepository UserRoleMappingRepository { get; }
         IUserManagerRepository UserManagerRepository { get; }
 

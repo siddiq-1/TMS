@@ -14,11 +14,9 @@ namespace TMS.Service.Interface
 {
     public interface ITaskAssignmentService
     {
-        Task<PageResult<TaskInfoData>> GetTaskListAsync();
-        Task<TaskAssignmentDto> GetByIdAsync(int id);
-        Task<TaskAssignment> AddAsync(int userId, TaskAssignmentDto model);
-        Task<TaskAssignment> UpdateAsync(int userId, int taskAssignmentId, TaskAssignmentDto model);
+        Task<PageResult<TaskInfoView>> GetTaskListAsync(int from, int to);
+        Task<bool> AddAsync(int userId, TaskInfoData model);
+        Task<bool> UpdateAsync(int userId, TaskInfoData model);
         Task<bool> DeleteAsync(int id);
-        Task<TaskAssignmentDto> GetFirtOrDefaultAsync(Expression<Func<TaskAssignment, bool>> predicate);
     }
 }

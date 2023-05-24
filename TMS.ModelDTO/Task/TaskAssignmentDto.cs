@@ -14,10 +14,10 @@ namespace TMS.ModelDTO.Task
         public int AssignedBy { get; set; }
         public int CategoryId { get; set; }
         public int StatusId { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public DateTime ModifiedDate { get; set; }
-        public int CreatedBy { get; set; }
-        public int ModifiedBy { get; set; }
+        //public DateTime CreatedDate { get; set; }
+        //public DateTime ModifiedDate { get; set; }
+        //public int CreatedBy { get; set; }
+        //public int ModifiedBy { get; set; }
         public bool IsActive { get; set; }
     }
 }

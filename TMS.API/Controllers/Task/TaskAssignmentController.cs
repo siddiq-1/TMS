@@ -21,21 +21,29 @@ namespace TMS.API.Controllers.Task
             _taskAssignmentService = taskAssignmentService;
         }
         [HttpGet]
-        public async Task<ServiceResponse<PageResult<TaskInfoData>>> GetTaskInfo()
+        public async Task<ServiceResponse<PageResult<TaskInfoView>>> GetTaskInfo(int from = 1, int to = 10)
         {
-            return Response(await _taskAssignmentService.GetTaskListAsync());
+            return Response(await _taskAssignmentService.GetTaskListAsync(from, to));
         }
 
         [HttpPost]
-        public async Task<ServiceResponse<TaskAssignment>> AddTask(TaskAssignmentDto taskAssignment)
+        public async Task<ServiceResponse<bool>> AddTask(TaskInfoData taskInfoData)
         {
-            return Response(await _taskAssignmentService.AddAsync(userId, taskAssignment));
+            return Response(await _taskAssignmentService.AddAsync(userId, taskInfoData));
         }
 
         [HttpPut("{id}")]
-        public async Task<ServiceResponse<TaskAssignment>> UpdateTaskListById(int id, TaskAssignmentDto taskAssignment)
+        public async Task<ServiceResponse<bool>> UpdateTaskListById(int id, TaskInfoData taskAssignment)
         {
-            return Response(await _taskAssignmentService.UpdateAsync(userId, id, taskAssignment));
+            return Response(await _taskAssignmentService.UpdateAsync(userId, taskAssignment));
         }
+
+
+        [HttpDelete("{id}")]
+        public async Task<ServiceResponse<bool>> DeleteTaskListById(int id)
+        {
+            return Response(await _taskAssignmentService.DeleteAsync(id));
+        }
+
     }
 }

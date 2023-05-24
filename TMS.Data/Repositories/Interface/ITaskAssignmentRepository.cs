@@ -12,6 +12,6 @@ namespace TMS.Data.Repositories.Interface
 {
     public interface ITaskAssignmentRepository : IRepository<TaskAssignment>
     {
-        Task<PageResult<TaskInfoData>> GetTaskListAsync();
+        Task<PageResult<TaskInfoView>> GetTaskListAsync(int from, int to);
     }
 }
