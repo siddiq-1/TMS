@@ -275,9 +275,6 @@ namespace TMS.Data.Migrations
                     b.Property<int>("Priority")
                         .HasColumnType("int");
 
-                    b.Property<int>("TaskPriorityId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(200)
@@ -285,7 +282,7 @@ namespace TMS.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TaskPriorityId");
+                    b.HasIndex("Priority");
 
                     b.ToTable("Task", (string)null);
                 });
@@ -662,7 +659,7 @@ namespace TMS.Data.Migrations
                 {
                     b.HasOne("TMS.Model.TaskPriorityTypeMaster", "TaskPriority")
                         .WithMany()
-                        .HasForeignKey("TaskPriorityId")
+                        .HasForeignKey("Priority")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

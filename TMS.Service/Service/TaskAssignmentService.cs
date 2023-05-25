@@ -39,6 +39,7 @@ namespace TMS.Service.Service
                 Priority = model.PriorityId,
             };
             await _unitOfWork.TaskRepository.AddAsync(task);
+            await _unitOfWork.CommitAsync();
             if (!string.IsNullOrEmpty(model.UserIds))
             {
                 var userIdList = HelperMethod.SplitString(model.UserIds);
@@ -54,15 +55,33 @@ namespace TMS.Service.Service
                         ModifiedDate = DateTime.UtcNow,
                         AssignedBy = userId,
                         AssignedTo = item,
-                        StatusId = 1,
+                        StatusId = model.StatusId,
                         IsActive = true,
                         TaskId = task.Id,
                     };
                     taskAssignList.Add(taskAssign);
                 }
                 await _unitOfWork.TaskAssignmentRepository.AddRangeAsync(taskAssignList);
+                return HelperMethod.Commit(await _unitOfWork.CommitAsync());
             }
-            return HelperMethod.Commit(await _unitOfWork.CommitAsync());
+            else
+            {
+                var taskAssign = new TaskAssignment()
+                {
+                    CreatedDate = DateTime.UtcNow,
+                    CategoryId = model.CategoryId,
+                    CreatedBy = userId,
+                    ModifiedBy = userId,
+                    ModifiedDate = DateTime.UtcNow,
+                    AssignedBy = userId,
+                    AssignedTo = userId,
+                    StatusId = model.StatusId,
+                    IsActive = true,
+                    TaskId = task.Id,
+                };
+                await _unitOfWork.TaskAssignmentRepository.AddAsync(taskAssign);
+                return HelperMethod.Commit(await _unitOfWork.CommitAsync());
+            }
         }
         public async Task<bool> DeleteAsync(int id)
         {

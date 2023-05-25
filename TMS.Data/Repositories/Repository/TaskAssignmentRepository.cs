@@ -24,7 +24,7 @@ namespace TMS.Data.Repositories.Repository
         {
             int totalRecords = 0;
             var fromParameter = DataProvider.GetIntSqlParameter("@From", from);
-            var toParameter = DataProvider.GetIntSqlParameter("@To", to, true);
+            var toParameter = DataProvider.GetIntSqlParameter("@To", to);
             var totalRecordsParameter = DataProvider.GetIntSqlParameter("@TotalRecords", totalRecords, true);
             var parameters = new List<SqlParameter>()
             {

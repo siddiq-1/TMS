@@ -10,6 +10,23 @@ namespace TMS.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "ExceptionLogs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Message = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Source = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Url = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ExceptionLogs", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "RecurringJob",
                 columns: table => new
                 {
@@ -64,25 +81,6 @@ namespace TMS.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Task",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
-                    CreatedDate = table.Column<DateTime>(type: "date", nullable: false, defaultValueSql: "(getutcdate())"),
-                    ModifiedDate = table.Column<DateTime>(type: "date", nullable: false, defaultValueSql: "(getutcdate())"),
-                    CreatedBy = table.Column<int>(type: "int", nullable: false),
-                    ModifiedBy = table.Column<int>(type: "int", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValueSql: "((1))")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Task", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "TaskCategory",
                 columns: table => new
                 {
@@ -98,6 +96,24 @@ namespace TMS.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TaskCategory", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TaskPriorityTypes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<int>(type: "int", nullable: false),
+                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifyBy = table.Column<int>(type: "int", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TaskPriorityTypes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -134,11 +150,42 @@ namespace TMS.Data.Migrations
                     ContactNo = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: true),
                     AlternateContactNo = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: true),
                     Address = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<int>(type: "int", nullable: false),
+                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifyBy = table.Column<int>(type: "int", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValueSql: "((1))")
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_User", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Task",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
+                    DueDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "date", nullable: false, defaultValueSql: "(getutcdate())"),
+                    ModifiedDate = table.Column<DateTime>(type: "date", nullable: false, defaultValueSql: "(getutcdate())"),
+                    CreatedBy = table.Column<int>(type: "int", nullable: false),
+                    ModifiedBy = table.Column<int>(type: "int", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValueSql: "((1))")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Task", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Task_TaskPriorityTypes_Priority",
+                        column: x => x.Priority,
+                        principalTable: "TaskPriorityTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -179,56 +226,6 @@ namespace TMS.Data.Migrations
                         principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "TaskAssignment",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    TaskId = table.Column<int>(type: "int", nullable: false),
-                    AssignedTo = table.Column<int>(type: "int", nullable: false),
-                    AssignedBy = table.Column<int>(type: "int", nullable: false),
-                    CategoryId = table.Column<int>(type: "int", nullable: false),
-                    StatusId = table.Column<int>(type: "int", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "date", nullable: false, defaultValueSql: "(getutcdate())"),
-                    ModifiedDate = table.Column<DateTime>(type: "date", nullable: false, defaultValueSql: "(getutcdate())"),
-                    CreatedBy = table.Column<int>(type: "int", nullable: false),
-                    ModifiedBy = table.Column<int>(type: "int", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValueSql: "((1))")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TaskAssignment", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_TaskAssignment_Task",
-                        column: x => x.TaskId,
-                        principalTable: "Task",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_TaskAssignment_TaskCategory",
-                        column: x => x.CategoryId,
-                        principalTable: "TaskCategory",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_TaskAssignment_TaskStatusMaster",
-                        column: x => x.StatusId,
-                        principalTable: "TaskStatusMaster",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_TaskAssignment_User_AssignedBy",
-                        column: x => x.AssignedBy,
-                        principalTable: "User",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_TaskAssignment_User_AssignedTo",
-                        column: x => x.AssignedTo,
-                        principalTable: "User",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -287,6 +284,56 @@ namespace TMS.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "TaskAssignment",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TaskId = table.Column<int>(type: "int", nullable: false),
+                    AssignedTo = table.Column<int>(type: "int", nullable: false),
+                    AssignedBy = table.Column<int>(type: "int", nullable: false),
+                    CategoryId = table.Column<int>(type: "int", nullable: false),
+                    StatusId = table.Column<int>(type: "int", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "date", nullable: false, defaultValueSql: "(getutcdate())"),
+                    ModifiedDate = table.Column<DateTime>(type: "date", nullable: false, defaultValueSql: "(getutcdate())"),
+                    CreatedBy = table.Column<int>(type: "int", nullable: false),
+                    ModifiedBy = table.Column<int>(type: "int", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValueSql: "((1))")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TaskAssignment", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TaskAssignment_Task",
+                        column: x => x.TaskId,
+                        principalTable: "Task",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TaskAssignment_TaskCategory",
+                        column: x => x.CategoryId,
+                        principalTable: "TaskCategory",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TaskAssignment_TaskStatusMaster",
+                        column: x => x.StatusId,
+                        principalTable: "TaskStatusMaster",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TaskAssignment_User_AssignedBy",
+                        column: x => x.AssignedBy,
+                        principalTable: "User",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_TaskAssignment_User_AssignedTo",
+                        column: x => x.AssignedTo,
+                        principalTable: "User",
+                        principalColumn: "Id");
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_ScheduleReport_ModifiedBy",
                 table: "ScheduleReport",
@@ -301,6 +348,11 @@ namespace TMS.Data.Migrations
                 name: "IX_ScheduleReport_UserId",
                 table: "ScheduleReport",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Task_Priority",
+                table: "Task",
+                column: "Priority");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TaskAssignment_AssignedBy",
@@ -347,6 +399,9 @@ namespace TMS.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "ExceptionLogs");
+
+            migrationBuilder.DropTable(
                 name: "ScheduleReport");
 
             migrationBuilder.DropTable(
@@ -378,6 +433,9 @@ namespace TMS.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "User");
+
+            migrationBuilder.DropTable(
+                name: "TaskPriorityTypes");
         }
     }
 }

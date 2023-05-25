@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using System.Globalization;
 using System.Linq.Expressions;
 using TMS.ModelDTO;
 using TMS.ModelDTO.Task;
@@ -218,6 +219,34 @@ namespace TMS.API.Infrastructure.FluentValidationInstaller
 
             RuleFor(dto => dto.IsActive)
            .NotNull().WithMessage("Must contain value");
+        }
+    }
+    public class TaskInfoDataValidator : ModelValidatorBase<TaskInfoData>
+    {
+        public TaskInfoDataValidator()
+        {
+            ConfigureCommonRules();
+            RuleFor(dto => dto.Title)
+             .MinimumLength(4).WithMessage("Title must be atleast 4 characters long.")
+             .MaximumLength(200).WithMessage("Title must be below 200 characters")
+             .NotNull().WithMessage("Title must contain any Value");
+
+            RuleFor(dto => dto.Description)
+                .MinimumLength(10).WithMessage("Description must be atleast 10 characters long.")
+                .MaximumLength(1000).WithMessage("Description must be below 1000 characters")
+                .NotNull().WithMessage("Description must contain value");
+
+            RuleFor(dto => dto.PriorityId)
+                .NotNull().WithMessage("PriorityID Must contain value");
+
+            RuleFor(dto => dto.StatusId)
+            .NotNull().WithMessage("StatusIds must contain any Value");
+
+            RuleFor(dto => dto.CategoryId)
+           .NotNull().WithMessage("CategoryId must contain any Value");
+
+            RuleFor(dto => dto.DueDate)
+                .NotNull().WithMessage("DueDate must contain value");
         }
     }
     public class LoginValidator : ModelValidatorBase<LoginDto>

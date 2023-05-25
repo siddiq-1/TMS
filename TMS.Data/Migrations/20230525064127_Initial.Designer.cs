@@ -12,7 +12,7 @@ using TMS.Data.MODEL;
 namespace TMS.Data.Migrations
 {
     [DbContext(typeof(TaskManagementSystemContext))]
-    [Migration("20230520060212_Initial")]
+    [Migration("20230525064127_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,6 +23,38 @@ namespace TMS.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("TMS.Model.ExceptionLog", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Source")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ExceptionLogs");
+                });
 
             modelBuilder.Entity("TMS.Model.RecurringJob", b =>
                 {
@@ -225,6 +257,9 @@ namespace TMS.Data.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
+                    b.Property<DateTime>("DueDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<bool?>("IsActive")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
@@ -239,12 +274,17 @@ namespace TMS.Data.Migrations
                         .HasColumnType("date")
                         .HasDefaultValueSql("(getutcdate())");
 
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Priority");
 
                     b.ToTable("Task", (string)null);
                 });
@@ -274,8 +314,7 @@ namespace TMS.Data.Migrations
                         .HasColumnType("date")
                         .HasDefaultValueSql("(getutcdate())");
 
-                    b.Property<bool?>("IsActive")
-                        .IsRequired()
+                    b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValueSql("((1))");
@@ -325,8 +364,7 @@ namespace TMS.Data.Migrations
                         .HasColumnType("date")
                         .HasDefaultValueSql("(getutcdate())");
 
-                    b.Property<bool?>("IsActive")
-                        .IsRequired()
+                    b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValueSql("((1))");
@@ -349,6 +387,38 @@ namespace TMS.Data.Migrations
                     b.ToTable("TaskCategory", (string)null);
                 });
 
+            modelBuilder.Entity("TMS.Model.TaskPriorityTypeMaster", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ModifyBy")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TaskPriorityTypes");
+                });
+
             modelBuilder.Entity("TMS.Model.TaskStatusMaster", b =>
                 {
                     b.Property<int>("Id")
@@ -365,8 +435,7 @@ namespace TMS.Data.Migrations
                         .HasColumnType("date")
                         .HasDefaultValueSql("(getutcdate())");
 
-                    b.Property<bool?>("IsActive")
-                        .IsRequired()
+                    b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValueSql("((1))");
@@ -411,6 +480,12 @@ namespace TMS.Data.Migrations
                         .HasMaxLength(15)
                         .HasColumnType("nvarchar(15)");
 
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime?>("DateOfBirth")
                         .HasColumnType("date");
 
@@ -429,11 +504,16 @@ namespace TMS.Data.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<bool?>("IsActive")
-                        .IsRequired()
+                    b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValueSql("((1))");
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ModifyBy")
+                        .HasColumnType("int");
 
                     b.Property<string>("Password")
                         .IsRequired()
@@ -575,6 +655,17 @@ namespace TMS.Data.Migrations
                     b.Navigation("ReportType");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("TMS.Model.Task", b =>
+                {
+                    b.HasOne("TMS.Model.TaskPriorityTypeMaster", "TaskPriority")
+                        .WithMany()
+                        .HasForeignKey("Priority")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TaskPriority");
                 });
 
             modelBuilder.Entity("TMS.Model.TaskAssignment", b =>

@@ -14,7 +14,7 @@ namespace TMS.Model
         public int Id { get; set; }
         public string Title { get; set; } = null!;
         public string? Description { get; set; }
-        public DateTime DueDate { get; set; } = DateTime.UtcNow;
+        public DateTime? DueDate { get; set; }
         public int Priority { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
@@ -23,6 +23,7 @@ namespace TMS.Model
         public bool? IsActive { get; set; }
 
         public virtual ICollection<TaskAssignment> TaskAssignments { get; set; }
+        [ForeignKey("Priority")]
         public virtual TaskPriorityTypeMaster TaskPriority { get; set; }
     }
 }
