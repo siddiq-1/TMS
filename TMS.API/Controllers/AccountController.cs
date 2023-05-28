@@ -37,7 +37,7 @@ namespace TMS.API.Controllers
         }
 
         [HttpPost("User/Registration")]
-        public async Task<ServiceResponse<Model.User>> Registration(UserDto userDto)
+        public async Task<ServiceResponse<bool>> Registration(UserDto userDto)
         {
             return Response(await _userService.AddAsync(userId, userDto));
         }

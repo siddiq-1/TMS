@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -14,9 +15,11 @@ namespace TMS.Service.Interface
 {
     public interface ITaskAssignmentService
     {
-        Task<PageResult<TaskInfoView>> GetTaskListAsync(int from, int to);
+        Task<PageResult<TaskInfoView>> GetTaskListAsync(TaskInfoViewDto taskInfoViewDto);
         Task<bool> AddAsync(int userId, TaskInfoData model);
         Task<bool> UpdateAsync(int userId, TaskInfoData model);
+        Task<bool> UpdateTaskStatus(int userId, int taskId, int statusId);
         Task<bool> DeleteAsync(int id);
+        Task<List<TaskCoverageDto>> TaskCoverage(int taskId);
     }
 }

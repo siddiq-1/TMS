@@ -9,7 +9,7 @@ using TMS.Model;
 using TMS.ModelDTO.Task;
 using TMS.ModelDTO.User;
 using TMS.Utility;
-using Task = TMS.Model.Task;
+using Task = System.Threading.Tasks.Task;
 
 namespace TMS.Service.Interface
 {
@@ -24,8 +24,8 @@ namespace TMS.Service.Interface
               int page = 1,
               int take = 10);
         Task<UserDto> GetByIdAsync(int id);
-        Task<User> AddAsync(int userId, UserDto model);
-        Task<User> UpdateAsync(int loginUserId, int userId, UserDto model);
+        Task<bool> AddAsync(int userId, UserDto model);
+        Task<bool> UpdateAsync(int loginUserId, int userId, UserDto model);
         Task<bool> DeleteAsync(int id);
         Task<UserDto> GetFirtOrDefaultAsync(Expression<Func<User, bool>> predicate);
         Task<User> GetFirtOrDefaultAsync(Expression<Func<User, object>> include, Expression<Func<User, bool>> predicate);

@@ -10,6 +10,7 @@ using TMS.Model;
 using TMS.ModelDTO.User;
 using TMS.Service.Interface;
 using TMS.Utility;
+using Task = System.Threading.Tasks.Task;
 
 namespace TMS.Service.Service
 {
@@ -22,24 +23,29 @@ namespace TMS.Service.Service
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-        public async Task<User> AddAsync(int userId, UserDto model)
+        public async Task<bool> AddAsync(int userId, UserDto model)
         {
             var user = _mapper.Map<UserDto, User>(model);
             user.Password = HelperMethod.GetHashPassword(user.Password);
+            user.CreatedBy = userId;
+            user.ModifyBy = userId;
             await _unitOfWork.UserRepository.AddAsync(user);
             await _unitOfWork.CommitAsync();
 
             var role = await _unitOfWork.RoleRepository.GetByNameAsync(n => n.Name == model.Role);
-            var userRole = new UserRoleMapping()
+            if (role != null)
             {
-                UserId = user.Id,
-                RoleId = role.Id,
-                CreatedBy = userId,
-                ModifiedBy = userId,
-            };
-            await _unitOfWork.UserRoleMappingRepository.AddAsync(userRole);
-            await _unitOfWork.CommitAsync();
-            return user;
+                var userRole = new UserRoleMapping()
+                {
+                    UserId = user.Id,
+                    RoleId = role.Id,
+                    CreatedBy = userId,
+                    ModifiedBy = userId,
+                };
+                await _unitOfWork.UserRoleMappingRepository.AddAsync(userRole);
+                await _unitOfWork.CommitAsync();
+            }
+            return true;
         }
         public async Task<bool> DeleteAsync(int id)
         {
@@ -61,7 +67,7 @@ namespace TMS.Service.Service
         int page = 1,
         int take = 10)
         {
-            var result = await _unitOfWork.UserRepository.GetAllAsync(include,filter, orderBy, page, take);
+            var result = await _unitOfWork.UserRepository.GetAllAsync(include, filter, orderBy, page, take);
             return _mapper.Map<PageResult<User>, PageResult<UserDto>>(result);
         }
         public async Task<UserDto> GetByIdAsync(int id)
@@ -82,25 +88,41 @@ namespace TMS.Service.Service
             return result;
         }
 
-        public async Task<User> UpdateAsync(int loginUserId, int userId, UserDto model)
+        public async Task<bool> UpdateAsync(int loginUserId, int userId, UserDto model)
         {
             var user = await _unitOfWork.UserRepository.GetByIdAsync(userId);
             user.FirstName = model.FirstName;
             user.SecondName = model.SecondName;
             user.UserName = model.UserName;
-            user.Password = model.Password;
+            user.Password = HelperMethod.GetHashPassword(model.Password);
             user.Email = model.Email;
             user.DateOfBirth = model.DateOfBirth;
             user.Gender = model.Gender;
             user.Address = model.Address;
             user.ContactNo = model.ContactNo;
             user.AlternateContactNo = model.AlternateContactNo;
-            //user.ModifiedDate = DateTime.UtcNow;
-            //user.ModifiedBy = loginUserId;
+            user.ModifiedDate = DateTime.UtcNow;
+            user.ModifyBy = loginUserId;
             user.IsActive = model.IsActive;
             _unitOfWork.UserRepository.Update(user);
             await _unitOfWork.CommitAsync();
-            return user;
+            if (model.Role != null)
+            {
+                var role = await _unitOfWork.UserRoleMappingRepository.GetFirtOrDefaultAsync(r => r.Role,u => u.UserId == model.Id);
+                if (model.Role != role.Role.Name)
+                {
+                    var userRole = new UserRoleMapping()
+                    {
+                        UserId = user.Id,
+                        RoleId = role.Id,
+                        CreatedBy = userId,
+                        ModifiedBy = userId,
+                    };
+                    await _unitOfWork.UserRoleMappingRepository.AddAsync(userRole);
+                    await _unitOfWork.CommitAsync();
+                }
+            }
+            return true;
         }
     }
 }

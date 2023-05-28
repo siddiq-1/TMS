@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -90,14 +91,21 @@ namespace TMS.Service.Service
             var result = await _unitOfWork.CommitAsync();
             return HelperMethod.Commit(result);
         }
-        public async Task<PageResult<TaskInfoView>> GetTaskListAsync(int from, int to)
+        public async Task<PageResult<TaskInfoView>> GetTaskListAsync(TaskInfoViewDto taskInfoViewDto)
         {
-            return await _unitOfWork.TaskAssignmentRepository.GetTaskListAsync(from, to);
+            return await _unitOfWork.TaskAssignmentRepository.GetTaskListAsync(taskInfoViewDto);
         }
         public async Task<TaskAssignmentDto> GetByIdAsync(int id)
         {
             var result = await _unitOfWork.TaskAssignmentRepository.GetByIdAsync(id);
             return _mapper.Map<TaskAssignment, TaskAssignmentDto>(result);
+        }
+        public async Task<bool> UpdateTaskStatus(int userId, int taskId, int statusId)
+        {
+            var taskAssign = await _unitOfWork.TaskAssignmentRepository.GetByIdAsync(taskId);
+            taskAssign.StatusId = statusId;
+            _unitOfWork.TaskAssignmentRepository.Update(taskAssign);
+            return HelperMethod.Commit(await _unitOfWork.CommitAsync());
         }
 
         public async Task<bool> UpdateAsync(int userId, TaskInfoData model)
@@ -139,6 +147,11 @@ namespace TMS.Service.Service
                 await _unitOfWork.TaskAssignmentRepository.UpdateRangeAsync(taskAssignList);
             }
             return HelperMethod.Commit(await _unitOfWork.CommitAsync());
+        }
+
+        public async Task<List<TaskCoverageDto>> TaskCoverage(int taskId)
+        {
+            return await _unitOfWork.TaskAssignmentRepository.GetTaskStatusAsync(taskId);
         }
     }
 }

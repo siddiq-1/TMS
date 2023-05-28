@@ -70,7 +70,7 @@ namespace TMS.API.Infrastructure.Automapper
 
             CreateMap<User, UserDto>().ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.UserRoleMappings.Role.Name));
             CreateMap<UserDto, User>()
-            .ForMember(dest => dest.UserRoleMappings, opt => opt.Ignore())
+            //.ForMember(dest => dest.UserRoleMappings, opt => opt.Ignore())
             .ForMember(dest => dest.CreatedBy, opt => opt.Ignore())
              .ForMember(dest => dest.ModifyBy, opt => opt.Ignore())
              .ForMember(dest => dest.ModifiedDate, opt => opt.Ignore())

@@ -31,13 +31,13 @@ namespace TMS.API.Controllers.User
         }
 
         [HttpPut("{id}")]
-        public async Task<ServiceResponse<Model.User>> UpdateUser(int id, UserDto User)
+        public async Task<ServiceResponse<bool>> UpdateUser(int id, UserDto User)
         {
             return Response(await _userService.UpdateAsync(userId, id, User));
         }
 
         [HttpPost]
-        public async Task<ServiceResponse<Model.User>> AddUser(UserDto User)
+        public async Task<ServiceResponse<bool>> AddUser(UserDto User)
         {
             return Response(await _userService.AddAsync(userId, User));
         }
