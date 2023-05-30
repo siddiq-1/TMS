@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TMS.ModelDTO;
 
-namespace TMS.Utility.Enums
+namespace TMS.Service.Interface
 {
-    internal class ModelResponseType
+    public interface ISendEmailService
     {
+        bool SendEmail(EmailData emailData);
     }
 }

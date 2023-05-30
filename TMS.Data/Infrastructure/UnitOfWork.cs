@@ -24,6 +24,7 @@ namespace TMS.Data.Infrastructure
         public IUserRoleMappingRepository UserRoleMappingRepository { get; }
         public ITaskPriorityRepository TaskPriorityRepository { get; }
         public IUserManagerRepository UserManagerRepository { get; }
+        public IAppSettingRepository AppSettingRepository { get; }
         public UnitOfWork(TaskManagementSystemContext tmsContext,
             IRecurringJobRepository recurringJobRepository,
             IReportTypeRepository reportTypeRepository,
@@ -36,7 +37,8 @@ namespace TMS.Data.Infrastructure
             IUserRepository userRepository,
             IUserRoleMappingRepository userRoleMappingRepository,
             IUserManagerRepository userManagerRepository,
-            ITaskPriorityRepository taskPriorityRepository)
+            ITaskPriorityRepository taskPriorityRepository,
+            IAppSettingRepository appSettingRepository)
         {
             _tmsContext = tmsContext;
             RecurringJobRepository = recurringJobRepository;
@@ -52,6 +54,7 @@ namespace TMS.Data.Infrastructure
             UserManagerRepository = userManagerRepository;
             UserManagerRepository = userManagerRepository;
             TaskPriorityRepository = taskPriorityRepository;
+            AppSettingRepository = appSettingRepository;
         }
 
         public async Task<int> CommitAsync()

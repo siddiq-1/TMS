@@ -10,6 +10,7 @@ using TMS.Data.Infrastructure;
 using TMS.Model;
 using TMS.ModelDTO;
 using TMS.ModelDTO.Task;
+using TMS.ModelDTO.User;
 using TMS.Service.Interface;
 using TMS.Utility;
 using Task = System.Threading.Tasks.Task;
@@ -81,9 +82,24 @@ namespace TMS.Service.Service
                     TaskId = task.Id,
                 };
                 await _unitOfWork.TaskAssignmentRepository.AddAsync(taskAssign);
+                //await SendTaskMail(userId);
                 return HelperMethod.Commit(await _unitOfWork.CommitAsync());
             }
         }
+
+        //private async Task SendTaskMail(int userId)
+        //{
+        //    var user = await _unitOfWork.UserRepository.GetByIdAsync(userId);
+        //    if (user != null)
+        //    {
+        //        var emailData = new EmailData();
+
+        //        var mailBody = new StringBuilder();
+        //        var appSettings = 
+                
+        //    }
+        //}
+
         public async Task<bool> DeleteAsync(int id)
         {
             var taskAssignment = await _unitOfWork.TaskAssignmentRepository.GetByIdAsync(id);

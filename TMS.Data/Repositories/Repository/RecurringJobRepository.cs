@@ -12,9 +12,9 @@ namespace TMS.Data.Repositories.Repository
 {
     public class RecurringJobRepository : Repository<RecurringJob>, IRecurringJobRepository
     {
-        public RecurringJobRepository(TaskManagementSystemContext tmsContext):base(tmsContext)
+        public RecurringJobRepository(TaskManagementSystemContext tmsContext) : base(tmsContext)
         {
-            
+
         }
     }
 }

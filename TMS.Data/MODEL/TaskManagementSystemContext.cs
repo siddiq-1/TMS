@@ -33,7 +33,7 @@ namespace TMS.Data.MODEL
         public virtual DbSet<UserRoleMapping> UserRoleMappings { get; set; } = null!;
         public virtual DbSet<TaskPriorityTypeMaster> TaskPriorityTypes { get; set; } = null!;
         public virtual DbSet<ExceptionLog> ExceptionLogs { get; set; } = null!;
-
+        public virtual DbSet<AppSetting> AppSettings { get; set; } = null!;
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -41,7 +41,6 @@ namespace TMS.Data.MODEL
                 optionsBuilder.UseSqlServer("Data Source=DESKTOP-4H5L4EA;Initial Catalog=TaskManagement;Integrated Security=True;");
             }
         }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<RecurringJob>(entity =>

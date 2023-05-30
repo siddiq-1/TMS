@@ -5,12 +5,14 @@ using Newtonsoft.Json;
 using System.Net;
 using System.Net.Http;
 using TMS.Model;
+using TMS.ModelDTO;
 using Task = System.Threading.Tasks.Task;
 
 namespace TMS.Utility
 {
     public static class HelperMethod
     {
+        
         public static bool Commit(int result)
         {
             if (result == 0)
@@ -105,6 +107,11 @@ namespace TMS.Utility
         public static List<int> SplitString(string data)
         {
             return data.Split(',').Where(x => !string.IsNullOrWhiteSpace(x)).Select(int.Parse).ToList();
+        }
+
+        public static void SendMail(EmailData emailData)
+        {
+            
         }
     }
 }
