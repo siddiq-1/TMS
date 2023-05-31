@@ -12,7 +12,7 @@ namespace TMS.Utility
 {
     public static class HelperMethod
     {
-        
+
         public static bool Commit(int result)
         {
             if (result == 0)
@@ -73,18 +73,27 @@ namespace TMS.Utility
 
         private static ServiceResponse<List<string>> GetExceptionDetails(Exception ex)
         {
-            var exceptionList = new List<string>
+            try
             {
-                ex.InnerException?.Message ?? "",
-                ex.StackTrace ?? "",
-                ex.Message
-            };
-            return new ServiceResponse<List<string>>
+                var exceptionList = new List<string>
+                {
+                    ex.InnerException?.Message ?? "",
+                    ex.StackTrace ?? "",
+                    ex.Message
+                };
+
+                return new ServiceResponse<List<string>>()
+                {
+                    Data = exceptionList,
+                    StatusCode = GetExceptionType(ex),
+                    Message = "Something Went Wrong! For more information, see the Data"
+                };
+            }
+            catch (Exception)
             {
-                Data = exceptionList,
-                StatusCode = GetExceptionType(ex),
-                Message = "Something Went Wrong! For more information, see the Data"
-            };
+
+            }
+            return new ServiceResponse<List<string>>();
         }
         private static int GetExceptionType(Exception ex)
         {
@@ -108,10 +117,9 @@ namespace TMS.Utility
         {
             return data.Split(',').Where(x => !string.IsNullOrWhiteSpace(x)).Select(int.Parse).ToList();
         }
-
-        public static void SendMail(EmailData emailData)
+        public static string CommaSeperatedString(List<string> stringList)
         {
-            
+            return string.Join(",", stringList);
         }
     }
 }

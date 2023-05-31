@@ -13,4 +13,13 @@ namespace TMS.Utility
         SMPT_USERNAME,
         SMPT_PASSWORD
     }
+    public enum TemplateIdentifier
+    {
+        TASK_ASSIGNED,
+        TASK_UPDATE,
+        TASK_STATUS_UPDATE,
+        TASK_ASSIGNED_SUBJECT,
+        TASK_UPDATE_SUBJECT,
+        TASK_STATUS_UPDATE_SUBJECT
+    }
 }

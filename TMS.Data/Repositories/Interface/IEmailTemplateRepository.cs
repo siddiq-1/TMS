@@ -8,8 +8,9 @@ using TMS.Model;
 
 namespace TMS.Data.Repositories.Interface
 {
-    public interface IUserRepository : IRepository<User>
+    public interface IEmailTemplateRepository : IRepository<EmailTemplate>
     {
-        Task<List<User>> GetUsersByIds(List<int> userIds);
+        Dictionary<string, string> GetEmailTemplates();
+        Task<string> GetEmailTemplatesByName(string name);
     }
 }

@@ -104,6 +104,13 @@ namespace TMS.API.Infrastructure.Automapper
         .ForMember(dest => dest.ModifyBy, opt => opt.Ignore())
         .ReverseMap();
 
+            CreateMap<EmailTemplateDto, EmailTemplate>()
+       .ForMember(dest => dest.CreatedDate, opt => opt.Ignore())
+       .ForMember(dest => dest.ModifiedDate, opt => opt.Ignore())
+       .ForMember(dest => dest.CreatedBy, opt => opt.Ignore())
+       .ForMember(dest => dest.ModifyBy, opt => opt.Ignore())
+       .ReverseMap();
+
             //PAGELIST DTO MAPPING
             CreateMap<PageResult<User>, PageResult<UserDto>>().ReverseMap().
                 ForMember(dest => dest.List, opt => opt.MapFrom(src => src.List))
@@ -170,6 +177,10 @@ namespace TMS.API.Infrastructure.Automapper
               .ForMember(dest => dest.TotalRecords, opt => opt.MapFrom(src => src.TotalRecords))
               .ForMember(dest => dest.List, opt => opt.UseDestinationValue());
 
+            CreateMap<PageResult<EmailTemplate>, PageResult<EmailTemplateDto>>().ReverseMap().
+           ForMember(dest => dest.List, opt => opt.MapFrom(src => src.List))
+           .ForMember(dest => dest.TotalRecords, opt => opt.MapFrom(src => src.TotalRecords))
+           .ForMember(dest => dest.List, opt => opt.UseDestinationValue());
         }
     }
 }

@@ -76,6 +76,12 @@ namespace TMS.Service.Service
             return _mapper.Map<User, UserDto>(result);
         }
 
+        public async Task<List<string>> GetEmailIdsByUserIds(List<int> userIds)
+        {
+            var userLists = await _unitOfWork.UserRepository.GetUsersByIds(userIds);
+            return userLists.Select(x => x.Email).ToList()!;
+        }
+
         public async Task<UserDto> GetFirtOrDefaultAsync(Expression<Func<User, bool>> predicate)
         {
             var result = await _unitOfWork.UserRepository.GetFirtOrDefaultAsync(predicate);
@@ -108,7 +114,7 @@ namespace TMS.Service.Service
             await _unitOfWork.CommitAsync();
             if (model.Role != null)
             {
-                var role = await _unitOfWork.UserRoleMappingRepository.GetFirtOrDefaultAsync(r => r.Role,u => u.UserId == model.Id);
+                var role = await _unitOfWork.UserRoleMappingRepository.GetFirtOrDefaultAsync(r => r.Role, u => u.UserId == model.Id);
                 if (model.Role != role.Role.Name)
                 {
                     var userRole = new UserRoleMapping()

@@ -20,8 +20,8 @@ namespace TMS.API.Controllers.Task
 
             _taskAssignmentService = taskAssignmentService;
         }
-        [HttpGet]
-        public async Task<ServiceResponse<PageResult<TaskInfoView>>> GetTaskInfo(TaskInfoViewDto taskInfoViewDto)
+        [HttpPost("GetTaskInfo")]
+        public async Task<ServiceResponse<PageResult<TaskInfoView>>> TaskInfo(TaskInfoViewDto taskInfoViewDto)
         {
             return Response(await _taskAssignmentService.GetTaskListAsync(taskInfoViewDto));
         }
@@ -36,7 +36,7 @@ namespace TMS.API.Controllers.Task
         public async Task<ServiceResponse<bool>> UpdateTaskListById(int id, TaskInfoData taskAssignment)
         {
             return Response(await _taskAssignmentService.UpdateAsync(userId, taskAssignment));
-        }  
+        }
         [HttpPut("UpdateTaskStatus/{id}")]
         public async Task<ServiceResponse<bool>> UpdateTaskListByUserId([FromRoute] int id, int statusId)
         {

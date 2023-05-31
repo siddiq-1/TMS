@@ -22,6 +22,9 @@ namespace TMS.API.Infrastructure.Installer
             service.AddTransient<IUserService, UserService>();
             service.AddTransient<ITaskService, TaskService>();
             service.AddTransient<ITaskPriorityService, TaskPrioritiesService>();
+            service.AddTransient<IAppSettingService, AppSettingService>();
+            service.AddTransient<IEmailTemplateService, EmailTemplateService>();
+            service.AddTransient<ISendEmailService, SendEmailService>();
 
             service.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(configuration["RedisConnection"]));
             service.AddSingleton<IRedisCache, RedisCache>();

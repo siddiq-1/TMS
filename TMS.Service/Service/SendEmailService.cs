@@ -41,7 +41,6 @@ namespace TMS.Service.Service
                 message.To.Add(emailData.MailTo);
                 message.Subject = emailData.MailSubject;
                 mailbody.Append(emailData.MailBody);
-                mailbody.Append("<div> </br></br> This mail is auto generated do not reply</br></br></div>");
 
                 message.Body = mailbody.ToString();
                 message.IsBodyHtml = true;

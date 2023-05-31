@@ -9,7 +9,7 @@ namespace TMS.Utility
     public enum ExceptionType
     {
         // Default status code for unknown exceptions
-        Unknown = 500, 
+        InternalServerError = 500, 
 
         // System exceptions
         ArgumentException = 400,

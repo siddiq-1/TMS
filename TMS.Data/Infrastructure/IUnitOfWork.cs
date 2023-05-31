@@ -23,5 +23,6 @@ namespace TMS.Data.Infrastructure
         IUserRoleMappingRepository UserRoleMappingRepository { get; }
         IUserManagerRepository UserManagerRepository { get; }
         IAppSettingRepository AppSettingRepository { get; }
+        IEmailTemplateRepository EmailTemplateRepository { get; }
     }
 }
