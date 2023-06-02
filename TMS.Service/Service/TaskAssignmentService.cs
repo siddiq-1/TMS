@@ -167,7 +167,13 @@ namespace TMS.Service.Service
                     taskAssignList.Add(taskAssign);
                 }
                 await _unitOfWork.TaskAssignmentRepository.UpdateRangeAsync(taskAssignList);
-                return HelperMethod.Commit(await _unitOfWork.CommitAsync());
+                var check = await _unitOfWork.CommitAsync();
+                var user = await _unitOfWork.UserRepository.GetByIdAsync(userId);
+                if (user != null && !string.IsNullOrEmpty(user.Email) && check >= 1)
+                {
+                    return await SendTaskAssignedMail(user, model, taskAssignList, null);
+                }
+                return check >= 1;
             }
             else
             {
