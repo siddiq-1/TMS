@@ -17,17 +17,21 @@ namespace TMS.Service.Service
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public ScheduleReportService(IUnitOfWork unitOfWork, IMapper mapper)
+        private readonly IOverdueService _overdueService;
+
+        public ScheduleReportService(IUnitOfWork unitOfWork, IMapper mapper, IOverdueService overdueService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _overdueService = overdueService;
         }
-        public async Task<ScheduleReport> AddAsync(ScheduleReportDto model)
+        public async Task<bool> AddAsync(ScheduleReportDto model)
         {
             var scheduleReport = _mapper.Map<ScheduleReportDto, ScheduleReport>(model);
             await _unitOfWork.ScheduleReportRepository.AddAsync(scheduleReport);
-            await _unitOfWork.CommitAsync();
-            return scheduleReport;
+            _overdueService.RemindTask(scheduleReport);
+
+            return HelperMethod.Commit(await _unitOfWork.CommitAsync());
         }
         public async Task<bool> DeleteAsync(int id)
         {
@@ -55,7 +59,7 @@ namespace TMS.Service.Service
             var result = await _unitOfWork.ScheduleReportRepository.GetFirtOrDefaultAsync(predicate);
             return _mapper.Map<ScheduleReport, ScheduleReportDto>(result);
         }
-        public async Task<ScheduleReport> UpdateAsync(int userId, int scheduleReportId, ScheduleReportDto model)
+        public async Task<bool> UpdateAsync(int userId, int scheduleReportId, ScheduleReportDto model)
         {
             var scheduleReport = await _unitOfWork.ScheduleReportRepository.GetByIdAsync(scheduleReportId);
             scheduleReport.CronExpression = model.CronExpression;
@@ -66,8 +70,7 @@ namespace TMS.Service.Service
             scheduleReport.ModifiedBy = userId;
             scheduleReport.IsActive = model.IsActive;
             _unitOfWork.ScheduleReportRepository.Update(scheduleReport);
-            await _unitOfWork.CommitAsync();
-            return scheduleReport;
+            return HelperMethod.Commit(await _unitOfWork.CommitAsync());
         }
     }
 }

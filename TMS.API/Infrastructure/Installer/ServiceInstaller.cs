@@ -1,4 +1,5 @@
-﻿using StackExchange.Redis;
+﻿using Hangfire;
+using StackExchange.Redis;
 using TMS.Service.Interface;
 using TMS.Service.Service;
 
@@ -25,6 +26,11 @@ namespace TMS.API.Infrastructure.Installer
             service.AddTransient<IAppSettingService, AppSettingService>();
             service.AddTransient<IEmailTemplateService, EmailTemplateService>();
             service.AddTransient<ISendEmailService, SendEmailService>();
+            service.AddHangfire(config => config.SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+                                 .UseSimpleAssemblyNameTypeSerializer().UseRecommendedSerializerSettings()
+                                 .UseSqlServerStorage(configuration["TaskManagementSystem"]));
+
+            service.AddHangfireServer();
 
             service.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(configuration["RedisConnection"]));
             service.AddSingleton<IRedisCache, RedisCache>();

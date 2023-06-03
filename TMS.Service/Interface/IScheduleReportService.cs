@@ -19,8 +19,8 @@ namespace TMS.Service.Interface
                            int page = 1,
                            int take = 10);
         Task<ScheduleReportDto> GetByIdAsync(int id);
-        Task<ScheduleReport> AddAsync(ScheduleReportDto model);
-        Task<ScheduleReport> UpdateAsync(int userId, int scheduleReportId, ScheduleReportDto model);
+        Task<bool> AddAsync(ScheduleReportDto model);
+        Task<bool> UpdateAsync(int userId, int scheduleReportId, ScheduleReportDto model);
         Task<bool> DeleteAsync(int id);
         Task<ScheduleReportDto> GetFirtOrDefaultAsync(Expression<Func<ScheduleReport, bool>> predicate);
     }

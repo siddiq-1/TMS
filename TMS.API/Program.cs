@@ -1,3 +1,4 @@
+using Hangfire;
 using Microsoft.EntityFrameworkCore;
 using System.Configuration;
 using TMS.API.Infrastructure.Extension;
@@ -25,21 +26,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseMiddleware<TokenBlacklistMiddleware>();
-//app.UseMiddleware<FluentValidationMiddleware<RoleDto>>();
-//app.UseMiddleware<FluentValidationMiddleware<TaskAssignmentDto>>();
-//app.UseMiddleware<FluentValidationMiddleware<TaskCategoryDto>>();
-//app.UseMiddleware<FluentValidationMiddleware<TaskDto>>();
-//app.UseMiddleware<FluentValidationMiddleware<TaskStatusMasterDto>>();
-//app.UseMiddleware<FluentValidationMiddleware<UserDto>>();
-//app.UseMiddleware<FluentValidationMiddleware<UserManagerMappingDto>>();
-//app.UseMiddleware<FluentValidationMiddleware<UserRoleMappingDto>>();
-//app.UseMiddleware<FluentValidationMiddleware<LoginDto>>();
-//app.UseMiddleware<FluentValidationMiddleware<RecurringJobDto>>();
-//app.UseMiddleware<FluentValidationMiddleware<ReportTypeMasterDto>>();
-//app.UseMiddleware<FluentValidationMiddleware<ScheduleReportDto>>();
-//app.UseMiddleware(typeof(FluentValidationMiddleware<>));
 app.UseMiddleware<ExceptionMiddleware>();
-
+app.UseHangfireDashboard();
 app.UseAuthentication();
 app.UseAuthorization();
 
