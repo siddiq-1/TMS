@@ -247,6 +247,7 @@ namespace TMS.Service.Service
             mailBody.Replace("#demoPriority#", priority.Type);
             emailData.FilePath = "";
             emailData.MailBody = mailBody.ToString();
+            emailData.MailSubject = await _emailTemplateService.GetEmailTemplateValueByName(TemplateIdentifier.TASK_UPDATE_SUBJECT.ToString());
             if (taskAssign != null)
             {
                 emailData.MailBcc = "";

@@ -5,11 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using TMS.Model;
 using TMS.ModelDTO;
+using Task = System.Threading.Tasks.Task;
 
 namespace TMS.Service.Interface
 {
     public interface IOverdueService
     {
-        void RemindTask(int userId, ScheduleReport scheduleReportDto);   
+        Task RemindTask(int userId, ScheduleReport scheduleReportDto);   
     }
 }

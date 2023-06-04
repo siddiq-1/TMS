@@ -25,11 +25,13 @@ namespace TMS.Service.Service
             _mapper = mapper;
             _overdueService = overdueService;
         }
-        public async Task<bool> AddAsync(ScheduleReportDto model)
+        public async Task<bool> AddAsync(int userId, ScheduleReportDto model)
         {
             var scheduleReport = _mapper.Map<ScheduleReportDto, ScheduleReport>(model);
+            scheduleReport.CreatedBy = userId;
+            scheduleReport.ModifiedBy = userId;
             await _unitOfWork.ScheduleReportRepository.AddAsync(scheduleReport);
-            _overdueService.RemindTask(scheduleReport);
+            _overdueService.RemindTask(userId, scheduleReport);
 
             return HelperMethod.Commit(await _unitOfWork.CommitAsync());
         }

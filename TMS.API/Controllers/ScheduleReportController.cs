@@ -25,7 +25,7 @@ namespace TMS.API.Controllers
         [HttpPost]
         public async Task<ServiceResponse<bool>> AddScheduleReport(ScheduleReportDto scheduleReport)
         {
-            return Response(await _scheduleReportService.AddAsync(scheduleReport));
+            return Response(await _scheduleReportService.AddAsync(userId, scheduleReport));
         }
     }
 }
