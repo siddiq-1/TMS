@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TMS.Model;
 using TMS.ModelDTO;
+using TMS.ModelDTO.Task;
 using TMS.Service.Interface;
 using TMS.Utility;
 using Task = System.Threading.Tasks.Task;
@@ -15,18 +16,17 @@ namespace TMS.Service.Service
     {
         private readonly IEmailTemplateService _emailTemplateService;
         private readonly ISendEmailService _sendEmailService;
-        private readonly ITaskAssignmentService _taskAssignmentService;
         private readonly IUserService _userService;
 
-        public OverdueService(IEmailTemplateService emailTemplateService, ISendEmailService sendEmailService, ITaskAssignmentService taskAssignmentService, IUserService userService)
+        public OverdueService(IEmailTemplateService emailTemplateService, ISendEmailService sendEmailService, IUserService userService)
         {
             _emailTemplateService = emailTemplateService;
             _sendEmailService = sendEmailService;
-            _taskAssignmentService = taskAssignmentService;
             _userService = userService;
         }
-        public async Task RemindTask(int userId, ScheduleReport scheduleReport)
+        public async Task RemindTask(int userId, TaskInfoData taskInfo, TaskAssignment task)
         {
+            //var priority = await _unitOfWork.TaskPriorityRepository.GetByIdAsync(task.PriorityId);
             var user = await _userService.GetByIdAsync(userId);
             if (user != null && !string.IsNullOrEmpty(user.Email))
             {
@@ -42,7 +42,8 @@ namespace TMS.Service.Service
                 emailData.Mailcc = "";
                 emailData.MailBcc = "";
                 emailData.MailTo = user.Email;
-                _sendEmailService.SendEmail(emailData);
+
+                await Task.Run(() => _sendEmailService.SendEmail(emailData));
             }
         }
     }

@@ -121,5 +121,9 @@ namespace TMS.Utility
         {
             return string.Join(",", stringList);
         }
+        public static string GetCronExpressionByDateTime(DateTime time)
+        {
+            return $"{time.Minute} {time.Hour} {time.Day} {time.Month} *";
+        }
     }
 }

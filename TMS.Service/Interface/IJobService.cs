@@ -4,14 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TMS.Model;
-using TMS.ModelDTO;
 using TMS.ModelDTO.Task;
-using Task = System.Threading.Tasks.Task;
 
 namespace TMS.Service.Interface
 {
-    public interface IOverdueService
+    public interface IJobService
     {
-        Task RemindTask(int userId, TaskInfoData taskInfo, TaskAssignment task);   
+        void ScheduleTaskReminder(string recurringJobId, int userId, TaskInfoData taskInfo, TaskAssignment task, string cronExpression);
     }
 }

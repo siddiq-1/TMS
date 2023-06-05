@@ -40,7 +40,7 @@ namespace TMS.Data.MODEL
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Data Source=DESKTOP-4H5L4EA;Initial Catalog=TaskManagement;Integrated Security=True;");
+                optionsBuilder.UseSqlServer("Data Source=DESKTOP-TFBH7SV;Initial Catalog=TaskManagement;Integrated Security=True;");
             }
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)

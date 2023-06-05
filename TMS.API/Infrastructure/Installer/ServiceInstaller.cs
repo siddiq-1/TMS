@@ -11,7 +11,7 @@ namespace TMS.API.Infrastructure.Installer
         {
             service.AddTransient<IRecurringJobService, RecurringJobService>();
             service.AddTransient<IAccountService, AccountService>();
-            service.AddTransient<IScheduleReportService, ScheduleReportService>();
+            //service.AddTransient<IScheduleReportService, ScheduleReportService>();
             service.AddTransient<IReportTypeService, ReportTypeService>();
             service.AddTransient<IRoleService, RoleService>();
             service.AddTransient<ITaskCategoryService, TaskCategoryService>();
@@ -26,9 +26,12 @@ namespace TMS.API.Infrastructure.Installer
             service.AddTransient<IAppSettingService, AppSettingService>();
             service.AddTransient<IEmailTemplateService, EmailTemplateService>();
             service.AddTransient<ISendEmailService, SendEmailService>();
+            //service.AddTransient<IScheduleReportService, ScheduleReportService>();
+            service.AddTransient<IJobService, JobService>();
+            service.AddTransient<IOverdueService, OverdueService>();
             service.AddHangfire(config => config.SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
                                  .UseSimpleAssemblyNameTypeSerializer().UseRecommendedSerializerSettings()
-                                 .UseSqlServerStorage(configuration["TaskManagementSystem"]));
+                                 .UseSqlServerStorage("Data Source=DESKTOP-TFBH7SV;Initial Catalog=TaskManagement;Integrated Security=True;"));
 
             service.AddHangfireServer();
 
