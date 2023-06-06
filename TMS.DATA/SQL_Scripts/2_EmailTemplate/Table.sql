@@ -257,3 +257,11 @@ insert into EmailTemplates values('TASK_ASSIGNED','<!DOCTYPE html>
 </body>
 </html>
 ',GETDATE(),GETDATE(),1,1);
+
+update AppSettings 
+set [Value] = 'cmvzcoaavlxinfyd' where Id = 2;
+
+insert into AppSettings values('SMPT_USERNAME','siddiqshaikh170@gmail.com',GETDATE(),1,GETDATE(),1);
+insert into AppSettings values('SMPT_PASSWORD','Siddiq@1234',GETDATE(),1,GETDATE(),1);
+insert into AppSettings values('SMPT_SERVER_PORT','587',GETDATE(),1,GETDATE(),1);
+insert into AppSettings values('SMPT_SERVER_HOST','smtp.gmail.com',GETDATE(),1,GETDATE(),1);

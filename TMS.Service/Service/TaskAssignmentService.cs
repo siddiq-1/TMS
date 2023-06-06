@@ -73,10 +73,7 @@ namespace TMS.Service.Service
                 var user = await _unitOfWork.UserRepository.GetByIdAsync(userId);
                 if (user != null && !string.IsNullOrEmpty(user.Email) && check >= 1)
                 {
-                    foreach (var item in taskAssignList)
-                    {
-                        _JobService.ScheduleTaskReminder($"TaskReminder-{task.Id}", userId, model, item, HelperMethod.GetCronExpressionByDateTime(model.DueDate.AddDays(-2)));
-                    }
+                    _JobService.ScheduleTaskReminder($"TaskReminder-{task.Id}", userId, model, HelperMethod.GetCronExpressionByDateTime(model.DueDate.AddDays(-7)));
                     return await SendTaskAssignedMail(user, model, taskAssignList, null);
                 }
                 return check >= 1;
@@ -101,7 +98,7 @@ namespace TMS.Service.Service
                 var user = await _unitOfWork.UserRepository.GetByIdAsync(userId);
                 if (user != null && !string.IsNullOrEmpty(user.Email) && check >= 1)
                 {
-                    _JobService.ScheduleTaskReminder($"TaskReminder-{task.Id}", userId, model, taskAssign, HelperMethod.GetCronExpressionByDateTime(task.DueDate.AddDays(-2)));
+                    _JobService.ScheduleTaskReminder($"TaskReminder-{task.Id}", userId, model, HelperMethod.GetCronExpressionByDateTime(task.DueDate.AddDays(-7)));
                     return await SendTaskAssignedMail(user, model, null, taskAssign);
                 }
                 return check >= 1;
@@ -178,10 +175,8 @@ namespace TMS.Service.Service
                 var user = await _unitOfWork.UserRepository.GetByIdAsync(userId);
                 if (user != null && !string.IsNullOrEmpty(user.Email) && check >= 1)
                 {
-                    foreach (var item in taskAssignList)
-                    {
-                        _JobService.ScheduleTaskReminder($"TaskReminder-{task.Id}", userId, model, item, HelperMethod.GetCronExpressionByDateTime(task.DueDate.AddDays(-2)));
-                    }
+
+                    _JobService.ScheduleTaskReminder($"TaskReminder-{task.Id}", userId, model, HelperMethod.GetCronExpressionByDateTime(task.DueDate.AddDays(-7)));
                     return await SendTaskUpdateMail(user, model, taskAssignList, null);
                 }
                 return check >= 1;
@@ -206,7 +201,7 @@ namespace TMS.Service.Service
                 var user = await _unitOfWork.UserRepository.GetByIdAsync(userId);
                 if (user != null && !string.IsNullOrEmpty(user.Email) && check >= 1)
                 {
-                    _JobService.ScheduleTaskReminder($"TaskReminder-{task.Id}", userId, model, taskAssign, HelperMethod.GetCronExpressionByDateTime(task.DueDate.AddDays(-2)));
+                    _JobService.ScheduleTaskReminder($"TaskReminder-{task.Id}", userId, model, HelperMethod.GetCronExpressionByDateTime(task.DueDate.AddDays(-7)));
                     return await SendTaskUpdateMail(user, model, null, taskAssign);
                 }
                 return check >= 1;

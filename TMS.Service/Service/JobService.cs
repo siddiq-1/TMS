@@ -1,6 +1,7 @@
 ﻿using TMS.Model;
 using TMS.ModelDTO.Task;
 using TMS.Service.Interface;
+using Task = System.Threading.Tasks.Task;
 
 namespace TMS.Service.Service
 {
@@ -12,9 +13,13 @@ namespace TMS.Service.Service
         {
             _overdueService = overdueService;
         }
-        public void ScheduleTaskReminder(string recurringJobId, int userId, TaskInfoData taskInfo, TaskAssignment task, string cronExpression)
+        public void ScheduleTaskReminder(string recurringJobId, int userId, TaskInfoData taskInfo, string cronExpression)
         {
-            Hangfire.RecurringJob.AddOrUpdate(recurringJobId, () => _overdueService.RemindTask(userId, taskInfo, task), cronExpression);
+            if (taskInfo.DueDate > DateTime.Now)
+            {
+                Hangfire.RecurringJob.RemoveIfExists(recurringJobId);
+            }
+            Hangfire.RecurringJob.AddOrUpdate(recurringJobId, () => _overdueService.RemindTask(userId, taskInfo), cronExpression);
         }
     }
 }

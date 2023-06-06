@@ -24,7 +24,7 @@ namespace TMS.Service.Service
             _sendEmailService = sendEmailService;
             _userService = userService;
         }
-        public async Task RemindTask(int userId, TaskInfoData taskInfo, TaskAssignment task)
+        public async Task RemindTask(int userId, TaskInfoData taskInfo)
         {
             //var priority = await _unitOfWork.TaskPriorityRepository.GetByIdAsync(task.PriorityId);
             var user = await _userService.GetByIdAsync(userId);

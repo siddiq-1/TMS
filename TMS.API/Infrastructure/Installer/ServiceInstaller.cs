@@ -31,7 +31,7 @@ namespace TMS.API.Infrastructure.Installer
             service.AddTransient<IOverdueService, OverdueService>();
             service.AddHangfire(config => config.SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
                                  .UseSimpleAssemblyNameTypeSerializer().UseRecommendedSerializerSettings()
-                                 .UseSqlServerStorage("Data Source=DESKTOP-TFBH7SV;Initial Catalog=TaskManagement;Integrated Security=True;"));
+                                 .UseSqlServerStorage("Data Source=DESKTOP-4H5L4EA;Initial Catalog=TaskManagement;Integrated Security=True;"));
 
             service.AddHangfireServer();
 

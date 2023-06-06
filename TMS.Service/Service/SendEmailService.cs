@@ -25,46 +25,48 @@ namespace TMS.Service.Service
         {
             var appSettings = _appSettingService.GetAppSetings();
             var userName = appSettings[ConfigurationKey.SMPT_USERNAME.ToString()];
-            var Password = appSettings[ConfigurationKey.SMPT_PASSWORD.ToString()];
-            var smptPort = Convert.ToInt32(appSettings[ConfigurationKey.SMPT_SERVER_PORT.ToString()]);
-            var smptHost = appSettings[ConfigurationKey.SMPT_SERVER_HOST.ToString()];
+            var password = appSettings[ConfigurationKey.SMPT_PASSWORD.ToString()];
+            var smtpPort = Convert.ToInt32(appSettings[ConfigurationKey.SMPT_SERVER_PORT.ToString()]);
+            var smtpHost = appSettings[ConfigurationKey.SMPT_SERVER_HOST.ToString()];
 
-            var mailbody = new StringBuilder();
-            using (SmtpClient mailClient = new SmtpClient())
+            using (SmtpClient mailClient = new SmtpClient(smtpHost, smtpPort))
+            using (MailMessage message = new MailMessage())
             {
-                mailClient.Port = smptPort;
-                mailClient.Host = smptHost;
-                MailMessage message = new MailMessage();
-
-                if (string.IsNullOrEmpty(emailData.MailTo)) { return false; }
-
-                message.To.Add(emailData.MailTo);
-                message.Subject = emailData.MailSubject;
-                mailbody.Append(emailData.MailBody);
-
-                message.Body = mailbody.ToString();
-                message.IsBodyHtml = true;
-
-                if (!string.IsNullOrEmpty(emailData.MailBcc))
+                try
                 {
-                    message.Bcc.Add(emailData.MailBcc);
+                    if (string.IsNullOrEmpty(emailData.MailTo)) { return false; }
+
+                    message.To.Add(emailData.MailTo);
+                    message.Subject = emailData.MailSubject;
+                    message.Body = emailData.MailBody;
+                    message.IsBodyHtml = true;
+
+                    if (!string.IsNullOrEmpty(emailData.MailBcc))
+                    {
+                        message.Bcc.Add(emailData.MailBcc);
+                    }
+
+                    if (!string.IsNullOrEmpty(emailData.FilePath))
+                    {
+                        message.Attachments.Add(new Attachment(Path.Combine(Directory.GetCurrentDirectory(), emailData.FilePath)));
+                    }
+
+                    mailClient.Credentials = new System.Net.NetworkCredential(userName, password);
+                    message.From = new MailAddress(userName);
+
+                    mailClient.EnableSsl = true;
+                    mailClient.Send(message);
+
+                    return true;
                 }
-
-                if (!string.IsNullOrEmpty(emailData.FilePath))
+                catch (Exception ex)
                 {
-                    message.Attachments.Add(new Attachment(Path.Combine(Directory.GetCurrentDirectory(), emailData.FilePath)));
+                    // Handle and log the exception appropriately
+                    // Add your custom error handling logic here
+                    return false;
                 }
-                mailClient.Credentials = new System.Net.NetworkCredential()
-                {
-                    UserName = userName,
-                    Password = Password
-                };
-                mailClient.UseDefaultCredentials = true;
-                mailClient.EnableSsl = true;
-                mailClient.Send(message);
-                mailClient.Dispose();
-                return true;
             }
         }
+
     }
 }

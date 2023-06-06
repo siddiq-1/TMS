@@ -10,6 +10,6 @@ namespace TMS.Service.Interface
 {
     public interface IJobService
     {
-        void ScheduleTaskReminder(string recurringJobId, int userId, TaskInfoData taskInfo, TaskAssignment task, string cronExpression);
+        void ScheduleTaskReminder(string recurringJobId, int userId, TaskInfoData taskInfo, string cronExpression);
     }
 }
