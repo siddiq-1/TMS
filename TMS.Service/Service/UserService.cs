@@ -1,12 +1,14 @@
 ﻿using AutoMapper;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using TMS.Data.Infrastructure;
 using TMS.Model;
+using TMS.ModelDTO;
 using TMS.ModelDTO.User;
 using TMS.Service.Interface;
 using TMS.Utility;
@@ -18,10 +20,13 @@ namespace TMS.Service.Service
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public UserService(IUnitOfWork unitOfWork, IMapper mapper)
+        private readonly IExcelService _excelService;
+
+        public UserService(IUnitOfWork unitOfWork, IMapper mapper, IExcelService excelService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _excelService = excelService;
         }
         public async Task<bool> AddAsync(int userId, UserDto model)
         {
@@ -92,6 +97,22 @@ namespace TMS.Service.Service
         {
             var result = await _unitOfWork.UserRepository.GetFirtOrDefaultAsync(include, predicate);
             return result;
+        }
+
+        public async Task<byte[]> GetUserExport(UserRequestDto userRequestDto)
+        {
+            var user = await _unitOfWork.UserRepository.GetUsers(userRequestDto);
+            var dataTable = user.List.ToList().ToDataTable();
+            var sheets = new List<WorkSheetInfo>()
+            {
+                new WorkSheetInfo()
+                {
+                    DataTable = dataTable,
+                    ReportHeading = "Users Reports",
+                    WorkSheetName = "Users"
+                }
+            };
+            return await _excelService.GetExcelDatabytes(sheets);
         }
 
         public async Task<bool> UpdateAsync(int loginUserId, int userId, UserDto model)

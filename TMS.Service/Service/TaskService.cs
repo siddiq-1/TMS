@@ -7,7 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using TMS.Data.Infrastructure;
 using TMS.Model;
+using TMS.ModelDTO;
 using TMS.ModelDTO.Task;
+using TMS.ModelDTO.User;
 using TMS.Service.Interface;
 using TMS.Utility;
 using Task = TMS.Model.Task;
@@ -19,10 +21,13 @@ namespace TMS.Service.Service
 
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public TaskService(IUnitOfWork unitOfWork, IMapper mapper)
+        private readonly IExcelService _excelService;
+
+        public TaskService(IUnitOfWork unitOfWork, IMapper mapper, IExcelService excelService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _excelService = excelService;
         }
         public async Task<Task> AddAsync(int userId, TaskDto model)
         {
@@ -58,6 +63,22 @@ namespace TMS.Service.Service
         {
             var result = await _unitOfWork.TaskRepository.GetFirtOrDefaultAsync(predicate);
             return _mapper.Map<Task, TaskDto>(result);
+        }
+
+        public async Task<byte[]> GetTaskExport(TaskRequestDto taskRequestDto)
+        {
+            var tasks = await _unitOfWork.TaskRepository.GetTasks(taskRequestDto);
+            var dataTable = tasks.List.ToList().ToDataTable();
+            var sheets = new List<WorkSheetInfo>()
+            {
+                new WorkSheetInfo()
+                {
+                    DataTable = dataTable,
+                    ReportHeading = "Tasks Reports",
+                    WorkSheetName = "Tasks"
+                }
+            };
+            return await _excelService.GetExcelDatabytes(sheets);
         }
         public async Task<Task> UpdateAsync(int userId, int TaskId, TaskDto model)
         {

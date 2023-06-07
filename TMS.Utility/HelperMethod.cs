@@ -2,8 +2,10 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Data.SqlClient;
 using Newtonsoft.Json;
+using System.Data;
 using System.Net;
 using System.Net.Http;
+using System.Reflection;
 using TMS.Model;
 using TMS.ModelDTO;
 using Task = System.Threading.Tasks.Task;
@@ -124,6 +126,27 @@ namespace TMS.Utility
         public static string GetCronExpressionByDateTime(DateTime time)
         {
             return $"{time.Minute} {time.Hour} {time.Day} {time.Month} *";
+        }
+        public static DataTable ToDataTable<T>(this List<T> items)
+        {
+            var dataTable = new DataTable(typeof(T).Name);
+
+            var properties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            foreach ( PropertyInfo property in properties )
+            {
+                var type = (property.PropertyType.IsGenericType && property.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>) ? Nullable.GetUnderlyingType(property.PropertyType) : property.PropertyType);
+                dataTable.Columns.Add(property.Name,type);
+            }
+            foreach (T item in items)
+            {
+                var value = new object[properties.Length];
+                for (int i = 0; i < properties.Length; i++)
+                {
+                    value[i] = properties[i].GetValue(item, null);
+                }
+                dataTable.Rows.Add(value);
+            }
+            return dataTable;
         }
     }
 }

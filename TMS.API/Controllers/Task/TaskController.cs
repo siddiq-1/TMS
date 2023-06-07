@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using TMS.Model;
 using TMS.ModelDTO.Task;
+using TMS.ModelDTO.User;
 using TMS.Service.Interface;
+using TMS.Service.Service;
 using TMS.Utility;
 
 namespace TMS.API.Controllers.Task
@@ -46,6 +48,13 @@ namespace TMS.API.Controllers.Task
         public async Task<ServiceResponse<bool>> DeleteTask(int id)
         {
             return Response(await _taskService.DeleteAsync(id));
+        }
+
+        [HttpPost("Task/Export")]
+        public async Task<HttpResponseMessage> UserExport(TaskRequestDto taskRequestDto)
+        {
+            var task = await _taskService.GetTaskExport(taskRequestDto);
+            return Response(task, "Task");
         }
     }
 }

@@ -47,5 +47,12 @@ namespace TMS.API.Controllers.User
         {
             return Response(await _userService.DeleteAsync(id));
         }
+
+        [HttpPost("User/Export")]
+        public async Task<HttpResponseMessage> UserExport(UserRequestDto userRequestDto)
+        {
+            var user = await _userService.GetUserExport(userRequestDto);
+            return Response(user, "User");
+        }
     }
 }

@@ -1,6 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.JsonWebTokens;
+using NuGet.Protocol;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Net.Mime;
 using System.Runtime.CompilerServices;
 using System.Security.Claims;
 using TMS.Utility;
@@ -37,6 +42,17 @@ namespace TMS.API.Controllers
                 result.SetSuccess(data);
             }
             return result;
+        }
+        [NonAction]
+        public new HttpResponseMessage Response(byte[] data, string fileName)
+        {
+            HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.OK);
+
+            message.Content = new ByteArrayContent(data);
+            message.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment");
+            message.Content.Headers.ContentDisposition.FileName = fileName;
+            message.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+            return message;
         }
     }
 }

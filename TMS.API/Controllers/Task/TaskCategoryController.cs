@@ -54,5 +54,10 @@ namespace TMS.API.Controllers.Task
         {
             return Response(await _taskCategoryService.DeleteAsync(id));
         }
+        [HttpPost("TaskCategory/BulkUpload")]
+        public async Task<ServiceResponse<bool>> BulkUploadTaskCategory(BulkUploadDto bulkUploadDto)
+        {
+            return Response(await _taskCategoryService.BulkUploadTaskCategory(userId, bulkUploadDto));
+        }
     }
 }

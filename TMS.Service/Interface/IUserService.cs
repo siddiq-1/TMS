@@ -30,5 +30,6 @@ namespace TMS.Service.Interface
         Task<UserDto> GetFirtOrDefaultAsync(Expression<Func<User, bool>> predicate);
         Task<User> GetFirtOrDefaultAsync(Expression<Func<User, object>> include, Expression<Func<User, bool>> predicate);
         Task<List<string>> GetEmailIdsByUserIds(List<int> userIds);
+        Task<byte[]> GetUserExport(UserRequestDto userRequestDto);
     }
 }

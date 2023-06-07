@@ -13,7 +13,7 @@ namespace TMS.Utility
 {
     public class SQLHelper
     {
-        public static string TMSConnectionString = "Data Source=DESKTOP-4H5L4EA;Initial Catalog=TaskManagement;Integrated Security=True;";
+        public static string TMSConnectionString = "Data Source=DESKTOP-TFBH7SV;Initial Catalog=TaskManagement;Integrated Security=True;";
 
         public static SqlConnection GetConnection()
         {

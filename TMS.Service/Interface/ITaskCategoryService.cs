@@ -24,5 +24,6 @@ namespace TMS.Service.Interface
         Task<TaskCategory> UpdateAsync(int userId, int taskCategoryId, TaskCategoryDto model);
         Task<bool> DeleteAsync(int id);
         Task<TaskCategoryDto> GetFirtOrDefaultAsync(Expression<Func<TaskCategory, bool>> predicate);
+        Task<bool> BulkUploadTaskCategory(int userId, BulkUploadDto bulkUploadDto);
     }
 }

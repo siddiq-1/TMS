@@ -13,6 +13,7 @@ namespace TMS.Service.Interface
 {
     public interface ITaskService
     {
+        Task<byte[]> GetTaskExport(TaskRequestDto taskRequestDto);
         Task<PageResult<TaskDto>> GetAllAsync(Expression<Func<Task, bool>>? filter = null,
                   Func<IQueryable<Task>, IOrderedQueryable<Task>>? orderBy = null,
                   int page = 1,

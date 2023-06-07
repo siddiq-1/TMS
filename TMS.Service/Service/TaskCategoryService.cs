@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -65,6 +67,41 @@ namespace TMS.Service.Service
             _unitOfWork.TaskCategoryRepository.Update(taskCategory);
             await _unitOfWork.CommitAsync();
             return taskCategory;
+        }
+
+        public async Task<bool> BulkUploadTaskCategory(int userId, BulkUploadDto bulkUploadDto)
+        {
+            var fileBytes = Convert.FromBase64String(bulkUploadDto.FileData);
+            using (var stream = new MemoryStream(fileBytes))
+            {
+                using (var excelPackage = new ExcelPackage(stream))
+                {
+                    var workSheets = excelPackage.Workbook.Worksheets[0];
+
+                    var taskCategoryList = new List<TaskCategory>();
+                    if (workSheets == null) { return false; }
+
+                    for (int row = 2; row < workSheets.Dimension.Rows; row++)
+                    {
+                        string cellValue = workSheets.Cells[row, 3].Value?.ToString()?.ToLower()!;
+                        if (!string.IsNullOrEmpty(workSheets.Cells[row, 2].Value.ToString()) || !string.IsNullOrEmpty(cellValue))
+                        {
+                            var taskCategory = new TaskCategory()
+                            {
+                                Name = workSheets.Cells[row, 2].Value.ToString()!,
+                                IsActive = (cellValue == "true" || cellValue == "yes") ? true : false,
+                                CreatedBy = userId,
+                                ModifiedBy = userId
+                            };
+                            taskCategoryList.Add(taskCategory);
+                        }
+                    }
+                    if (taskCategoryList != null) { return false; }
+
+                    await _unitOfWork.TaskCategoryRepository.AddRangeAsync(taskCategoryList!);
+                    return HelperMethod.Commit(await _unitOfWork.CommitAsync());
+                }
+            }
         }
     }
 }
