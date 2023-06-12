@@ -9,6 +9,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using TMS.Model;
+using TMS.ModelDTO.User;
 using TMS.Service.Interface;
 using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
 
@@ -35,6 +36,26 @@ namespace TMS.Service.Service
             {
                 Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.Now.AddDays(7),
+                SigningCredentials = credentials
+            };
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
+        }
+
+        public string GetToken(UserDto user)
+        {
+            var claims = new List<Claim>()
+            {
+                new Claim("UserId",user.Id.ToString()),
+                new Claim(JwtRegisteredClaimNames.NameId , user.UserName),
+            };
+            var credentials = new SigningCredentials(_key, SecurityAlgorithms.HmacSha256);
+
+            var tokenDescriptor = new SecurityTokenDescriptor()
+            {
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.Now.AddHours(1),
                 SigningCredentials = credentials
             };
             var tokenHandler = new JwtSecurityTokenHandler();

@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using TMS.Data.MODEL;
 using TMS.Model;
 using TMS.ModelDTO.Task;
-using TMS.ModelDTO.User;
 using TMS.Service.Interface;
 using TMS.Utility;
 
 namespace TMS.API.Controllers.Task
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class TaskCategoryController : BaseApiController
@@ -54,6 +48,7 @@ namespace TMS.API.Controllers.Task
         {
             return Response(await _taskCategoryService.DeleteAsync(id));
         }
+        [Authorize(Roles = "Admin")]
         [HttpPost("TaskCategory/BulkUpload")]
         public async Task<ServiceResponse<bool>> BulkUploadTaskCategory(BulkUploadDto bulkUploadDto)
         {

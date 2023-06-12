@@ -151,5 +151,17 @@ namespace TMS.Service.Service
             }
             return true;
         }
+
+        public async Task<bool> UserResetPassword(ResetPasswordDto resetPasswordDto)
+        {
+            var user = await _unitOfWork.UserRepository.GetFirtOrDefaultAsync(model => model.Email == resetPasswordDto.Email);
+            if (user != null || resetPasswordDto.Password != resetPasswordDto.ConfirmPassword) { return false; }
+
+            user.Password = HelperMethod.GetHashPassword(resetPasswordDto.Password);
+            user.ModifiedDate = DateTime.UtcNow;
+            user.ModifyBy = user.Id;
+            _unitOfWork.UserRepository.Update(user);
+            return HelperMethod.Commit(await _unitOfWork.CommitAsync());
+        }
     }
 }

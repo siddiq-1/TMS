@@ -42,6 +42,27 @@ namespace TMS.API.Controllers
             return Response(await _userService.AddAsync(userId, userDto));
         }
 
+        [HttpGet("SendResetPasswordLink")]
+        public async Task<ServiceResponse<bool>> SendResetPasswordLink(string email_UserName)
+        {
+            return Response(await _accountService.ResetPassword(email_UserName));
+        }
+
+        [HttpGet("ResetPassword")]
+        public ServiceResponse<ResetPasswordDto> ResetPassword([FromRoute] string email)
+        {
+            var model = new ResetPasswordDto()
+            {
+                Email = email
+            };
+            return Response(model);
+        }
+        [HttpPost("ResetPassword")]
+        public async Task<ServiceResponse<bool>> ResetPassword(ResetPasswordDto resetPasswordDto)
+        {
+            return Response(await _userService.UserResetPassword(resetPasswordDto));
+        }
+
         [HttpPost("User/Logout")]
         public async Task<ServiceResponse<bool>> Logout(string token)
         {

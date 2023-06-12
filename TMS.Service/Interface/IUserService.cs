@@ -6,6 +6,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using TMS.Model;
+using TMS.ModelDTO;
 using TMS.ModelDTO.Task;
 using TMS.ModelDTO.User;
 using TMS.Utility;
@@ -31,5 +32,6 @@ namespace TMS.Service.Interface
         Task<User> GetFirtOrDefaultAsync(Expression<Func<User, object>> include, Expression<Func<User, bool>> predicate);
         Task<List<string>> GetEmailIdsByUserIds(List<int> userIds);
         Task<byte[]> GetUserExport(UserRequestDto userRequestDto);
+        Task<bool> UserResetPassword(ResetPasswordDto resetPasswordDto);
     }
 }
