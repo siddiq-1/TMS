@@ -13,6 +13,6 @@ namespace TMS.Data.Repositories.Interface
 {
     public interface ITaskRepository : IRepository<Task>
     {
-        Task<PageResult<Task>> GetTasks(TaskRequestDto taskRequestDto);
+        //Task<PageResult<Task>> GetTasks(TaskRequestDto taskRequestDto);
     }
 }

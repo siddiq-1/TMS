@@ -46,5 +46,32 @@ namespace TMS.Service.Service
                 await Task.Run(() => _sendEmailService.SendEmail(emailData));
             }
         }
+
+        public async Task ScheduleTask(int userId, int taskId, TaskInfoView taskInfoView)
+        {
+            var user = await _userService.GetByIdAsync(userId);
+            if (user != null && !string.IsNullOrEmpty(user.Email))
+            {
+                var mailBody = new StringBuilder();
+                var emailTemplates = await _emailTemplateService.GetEmailTemplateValueByName(TemplateIdentifier.SCHEDULE_TASK_REMINDER.ToString());
+                mailBody.Append(emailTemplates);
+                mailBody.Replace("#DemoId#", taskInfoView.Id.ToString());
+                mailBody.Replace("#demo#", taskInfoView.Title);
+                mailBody.Replace("#demoDescription#", taskInfoView.Description);
+                mailBody.Replace("#demoAssigned#", user.FirstName);
+                mailBody.Replace("#demoDueDate#", taskInfoView.DueDate.ToString());
+                mailBody.Replace("#demoPriority#", taskInfoView.Priority);
+
+                EmailData emailData = new EmailData();
+                emailData.MailBody = mailBody.ToString();
+                emailData.FilePath = "";
+                emailData.MailSubject = await _emailTemplateService.GetEmailTemplateValueByName(TemplateIdentifier.SCHEDULE_TASK_REMINDER_SUBJECT.ToString());
+                emailData.Mailcc = "";
+                emailData.MailBcc = "";
+                emailData.MailTo = user.Email;
+
+                await Task.Run(() => _sendEmailService.SendEmail(emailData));
+            }
+        }
     }
 }

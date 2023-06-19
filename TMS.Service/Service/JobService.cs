@@ -21,5 +21,10 @@ namespace TMS.Service.Service
             }
             Hangfire.RecurringJob.AddOrUpdate(recurringJobId, () => _overdueService.RemindTask(userId, taskInfo), cronExpression);
         }
+
+        public void ScheduleTaskReminder(string recurringJobId, int userId, int taskId, TaskInfoView taskInfoView, string cronExpression)
+        {
+            Hangfire.RecurringJob.AddOrUpdate(recurringJobId, () => _overdueService.ScheduleTask(userId, taskId, taskInfoView), cronExpression);
+        }
     }
 }

@@ -49,12 +49,5 @@ namespace TMS.API.Controllers.Task
         {
             return Response(await _taskService.DeleteAsync(id));
         }
-
-        [HttpPost("Task/Export")]
-        public async Task<HttpResponseMessage> UserExport(TaskRequestDto taskRequestDto)
-        {
-            var task = await _taskService.GetTaskExport(taskRequestDto);
-            return Response(task, "Task");
-        }
     }
 }

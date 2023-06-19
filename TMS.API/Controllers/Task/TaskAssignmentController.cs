@@ -40,7 +40,7 @@ namespace TMS.API.Controllers.Task
             return Response(await _taskAssignmentService.UpdateAsync(userId, taskAssignment));
         }
         [HttpPut("UpdateTaskStatus/{id}")]
-        public async Task<ServiceResponse<bool>> UpdateTaskListByUserId([FromRoute] int id, int statusId)
+        public async Task<ServiceResponse<bool>> UpdateTaskStatusById([FromRoute] int id, int statusId)
         {
             return Response(await _taskAssignmentService.UpdateTaskStatus(userId, id, statusId));
         }
@@ -49,6 +49,19 @@ namespace TMS.API.Controllers.Task
         public async Task<ServiceResponse<bool>> DeleteTaskListById(int id)
         {
             return Response(await _taskAssignmentService.DeleteAsync(id));
+        }
+
+        [HttpPost("Task/Export")]
+        public async Task<HttpResponseMessage> TaskExport(TaskInfoViewDto taskInfoViewDto)
+        {
+            var task = await _taskAssignmentService.GetTaskExport(taskInfoViewDto);
+            return Response(task, "Task");
+        }
+
+        [HttpGet("Schedule/Task")]
+        public async Task<ServiceResponse<bool>> ScheduleTask(ScheduleReportDto scheduleReportDto)
+        {
+            return Response(await _taskAssignmentService.ScheduleTask(userId, scheduleReportDto));
         }
     }
 }

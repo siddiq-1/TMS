@@ -55,22 +55,7 @@ namespace TMS.Utility
             var exceptionDetails = GetExceptionDetails(ex);
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = exceptionDetails.StatusCode;
-            await context.Response.WriteAsync(exceptionDetails.ToString() ?? "");
-        }
-        public static async Task HandleModelValidation(HttpContext context, IEnumerable<string> errors)
-        {
-            var result = new ServiceResponse<List<string>>()
-            {
-                Data = errors.ToList(),
-                Message = "Invalid Models ! For more kindly check the data",
-                StatusCode = (int)HttpStatusCode.BadRequest
-            };
-
-            context.Response.ContentType = "application/json";
-            context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-
-            var responseMessage = await Serialize(result);
-            await context.Response.WriteAsync(responseMessage);
+            await context.Response.WriteAsync(await Serialize(exceptionDetails) ?? "");
         }
 
         private static ServiceResponse<List<string>> GetExceptionDetails(Exception ex)
@@ -100,9 +85,23 @@ namespace TMS.Utility
         private static int GetExceptionType(Exception ex)
         {
             var exceptionType = ex.GetType();
-            Dictionary<ExceptionType, int> data = typeof(ExceptionType).GetEnumValues().Cast<ExceptionType>().ToDictionary(key => key, value => (int)value);
 
-            return data.FirstOrDefault(x => x.Key.ToString() == exceptionType.ToString()).Value;
+            if (exceptionType.Name.ToString() == "ArgumentException" || exceptionType.Name.ToString() == "IndexOutOfRangeException" || exceptionType.Name.ToString() == "DivideByZeroException" || exceptionType.Name.ToString() == "ArgumentOutOfRangeException" || exceptionType.Name.ToString() == "ArgumentNullException" || exceptionType.Name.ToString() == "FormatException" || exceptionType.Name.ToString() == "InvalidCastException" || exceptionType.Name.ToString() == "InvalidOperationException")
+            {
+                return 400;
+            }
+            else if (exceptionType.Name.ToString() == "KeyNotFoundException" || exceptionType.Name.ToString() == "FileNotFoundException")
+            {
+                return 404;
+            }
+            else if (exceptionType.Name.ToString() == "UnauthorizedAccessException")
+            {
+                return 403;
+            }
+            else
+            {
+                return 500;
+            }
         }
 
         public static string GetHashPassword(string password)
@@ -132,10 +131,10 @@ namespace TMS.Utility
             var dataTable = new DataTable(typeof(T).Name);
 
             var properties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
-            foreach ( PropertyInfo property in properties )
+            foreach (PropertyInfo property in properties)
             {
                 var type = (property.PropertyType.IsGenericType && property.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>) ? Nullable.GetUnderlyingType(property.PropertyType) : property.PropertyType);
-                dataTable.Columns.Add(property.Name,type);
+                dataTable.Columns.Add(property.Name, type);
             }
             foreach (T item in items)
             {

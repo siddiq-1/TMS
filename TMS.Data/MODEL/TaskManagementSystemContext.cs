@@ -122,15 +122,6 @@ namespace TMS.Data.MODEL
 
                 entity.Property(e => e.ScheduleTime).HasMaxLength(100);
 
-                entity.HasOne(d => d.ReportType)
-                    .WithMany(p => p.ScheduleReports)
-                    .HasForeignKey(d => d.ModifiedBy)
-                    .HasConstraintName("FK_ScheduleReport_ReportTypeMaster");
-
-                entity.HasOne(d => d.RecurringJob)
-                    .WithMany(p => p.ScheduleReports)
-                    .HasForeignKey(d => d.RecurringJobId)
-                    .HasConstraintName("FK_ScheduleReport_RecurringJob");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.ScheduleReports)

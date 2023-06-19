@@ -93,8 +93,6 @@ namespace TMS.API.Infrastructure.FluentValidationInstaller
         {
             ConfigureCommonRules();
 
-            RuleFor(dto => dto.ReportTypeId)
-               .NotNull().WithMessage("ReportTypeId must contain any Value");
 
             RuleFor(dto => dto.ScheduleTime)
            .NotNull().WithMessage("ScheduleTime must contain any Value");
@@ -102,14 +100,6 @@ namespace TMS.API.Infrastructure.FluentValidationInstaller
             RuleFor(dto => dto.UserId)
            .NotNull().WithMessage("UserId must contain any Value");
 
-            RuleFor(dto => dto.RecurringJobId)
-           .NotNull().WithMessage("RecurringJobId must contain any Value");
-
-            RuleFor(dto => dto.CronExpression)
-           .NotNull().WithMessage("CronExpression must contain any Value");
-
-            RuleFor(dto => dto.IsActive)
-                .NotNull().WithMessage("Must contain value");
         }
     }
     public class TaskValidator : ModelValidatorBase<TaskDto>

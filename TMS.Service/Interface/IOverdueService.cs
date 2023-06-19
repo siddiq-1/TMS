@@ -12,6 +12,7 @@ namespace TMS.Service.Interface
 {
     public interface IOverdueService
     {
-        Task RemindTask(int userId, TaskInfoData taskInfo);   
+        Task RemindTask(int userId, TaskInfoData taskInfo);
+        Task ScheduleTask(int userId, int taskId, TaskInfoView taskInfoView);
     }
 }

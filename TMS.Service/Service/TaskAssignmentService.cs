@@ -18,11 +18,12 @@ namespace TMS.Service.Service
         private readonly ISendEmailService _sendEmailService;
         private readonly IUserService _userService;
         private readonly IJobService _JobService;
+        private readonly IExcelService _excelService;
         private readonly IMapper _mapper;
         public TaskAssignmentService(IUnitOfWork unitOfWork,
             IMapper mapper, IEmailTemplateService emailTemplateService,
             ISendEmailService sendEmailService,
-            IUserService userService, IJobService jobService)
+            IUserService userService, IJobService jobService, IExcelService excelService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
@@ -30,6 +31,7 @@ namespace TMS.Service.Service
             _sendEmailService = sendEmailService;
             _userService = userService;
             _JobService = jobService;
+            _excelService = excelService;
         }
         public async Task<bool> AddAsync(int userId, TaskInfoData model)
         {
@@ -211,6 +213,58 @@ namespace TMS.Service.Service
         public async Task<List<TaskCoverageDto>> TaskCoverage(int taskId)
         {
             return await _unitOfWork.TaskAssignmentRepository.GetTaskStatusAsync(taskId);
+        }
+        public async Task<byte[]> GetTaskExport(TaskInfoViewDto taskInfoViewDto)
+        {
+            var tasks = await _unitOfWork.TaskAssignmentRepository.GetTaskListAsync(taskInfoViewDto);
+            var dataTable = tasks.List.ToList().ToDataTable();
+            var sheets = new List<WorkSheetInfo>()
+            {
+                new WorkSheetInfo()
+                {
+                    DataTable = dataTable,
+                    ReportHeading = "Tasks Reports",
+                    WorkSheetName = "Tasks"
+                }
+            };
+            return await _excelService.GetExcelDatabytes(sheets);
+        }
+
+        public async Task<bool> ScheduleTask(int userId, ScheduleReportDto scheduleReportDto)
+        {
+            var taskListDto = new TaskInfoViewDto()
+            {
+                From = 1,
+                To = 10,
+                Id = scheduleReportDto.TaskId,
+                Search = "",
+                SortColumn = "",
+                SortOrder = ""
+            };
+            var taskList = await _unitOfWork.TaskAssignmentRepository.GetTaskListAsync(taskListDto);
+            var task = taskList.List.FirstOrDefault(x => x.Id == scheduleReportDto.TaskId);
+            if (task != null)
+            {
+                var cronExpression = HelperMethod.GetCronExpressionByDateTime(scheduleReportDto.ScheduleTime);
+                var recurringJobId = $"ScheduleTask-{scheduleReportDto.TaskId}";
+
+                _JobService.ScheduleTaskReminder(recurringJobId, scheduleReportDto.UserId, scheduleReportDto.TaskId, task, cronExpression);
+                var scheduleReport = new ScheduleReport()
+                {
+                    RecurringJobId = recurringJobId,
+                    ScheduleTime = scheduleReportDto.ScheduleTime,
+                    CronExpression = cronExpression,
+                    UserId = scheduleReportDto.UserId,
+                    CreatedBy = userId,
+                    CreatedDate = DateTime.UtcNow,
+                    ModifiedDate = DateTime.UtcNow,
+                    ModifiedBy = userId,
+                    IsActive = true,
+                };
+                await _unitOfWork.ScheduleReportRepository.AddAsync(scheduleReport);
+                return HelperMethod.Commit(await _unitOfWork.CommitAsync());
+            }
+            return false;
         }
         private async Task<bool> SendTaskAssignedMail(User user, TaskInfoData task, List<TaskAssignment>? taskAssignList, TaskAssignment? taskAssign)
         {
