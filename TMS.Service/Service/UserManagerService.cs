@@ -62,9 +62,9 @@ namespace TMS.Service.Service
             var result = await _unitOfWork.UserManagerRepository.GetFirtOrDefaultAsync(predicate);
             return _mapper.Map<UserManagerMapping, UserManagerMappingDto>(result);
         }
-        public async Task<UserManagerMapping> UpdateAsync(int loginId, int id, UserManagerMappingDto model)
+        public async Task<UserManagerMapping> UpdateAsync(int loginId, int userId, UserManagerMappingDto model)
         {
-            var userManagerMapping = await _unitOfWork.UserManagerRepository.GetByIdAsync(id);
+            var userManagerMapping = await _unitOfWork.UserManagerRepository.GetByUserIdAsync(u => u.UserId == userId);
             userManagerMapping.UserId = model.UserId;
             userManagerMapping.ManagerId = model.ManagerId;
             userManagerMapping.ModifiedDate = DateTime.UtcNow;

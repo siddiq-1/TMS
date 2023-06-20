@@ -11,7 +11,7 @@ using TMS.Utility;
 
 namespace TMS.API.Controllers.Task
 {
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class TaskAssignmentController : BaseApiController

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TMS.Model;
 using TMS.ModelDTO.User;
@@ -7,6 +8,7 @@ using TMS.Utility;
 
 namespace TMS.API.Controllers.User
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : BaseApiController
@@ -48,12 +50,12 @@ namespace TMS.API.Controllers.User
             return Response(await _userService.DeleteAsync(id));
         }
 
-        [HttpPost("User/Export")]
+        [Authorize(Roles = "Admin")]
+        [HttpPost("Export")]
         public async Task<HttpResponseMessage> UserExport(UserRequestDto userRequestDto)
         {
-            throw new Exception();
-            //var user = await _userService.GetUserExport(userRequestDto);
-            //return Response(user, "User");
+            var user = await _userService.GetUserExport(userRequestDto);
+            return Response(user, "User");
         }
     }
 }

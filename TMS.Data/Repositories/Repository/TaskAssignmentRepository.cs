@@ -26,6 +26,8 @@ namespace TMS.Data.Repositories.Repository
         public async Task<PageResult<TaskInfoView>> GetTaskListAsync(TaskInfoViewDto taskInfoViewDto)
         {
             int totalRecords = 0;
+
+            var taskIdParameter = DataProvider.GetIntSqlParameter("Id", taskInfoViewDto.TaskId);
             var fromParameter = DataProvider.GetIntSqlParameter("@From", taskInfoViewDto.From);
             var toParameter = DataProvider.GetIntSqlParameter("@To", taskInfoViewDto.To);
             var searchParameter = DataProvider.GetStringSqlParameter("@Search", taskInfoViewDto.Search);
@@ -34,6 +36,7 @@ namespace TMS.Data.Repositories.Repository
             var totalRecordsParameter = DataProvider.GetIntSqlParameter("@TotalRecords", totalRecords, true);
             var parameters = new List<SqlParameter>()
             {
+                taskIdParameter,
                 fromParameter,
                 toParameter,
                 searchParameter,

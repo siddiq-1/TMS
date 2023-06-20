@@ -37,18 +37,45 @@ namespace TMS.Service.Service
             await _unitOfWork.UserRepository.AddAsync(user);
             await _unitOfWork.CommitAsync();
 
-            var role = await _unitOfWork.RoleRepository.GetByNameAsync(n => n.Name == model.Role);
-            if (role != null)
+            if (!string.IsNullOrEmpty(model.Role))
             {
-                var userRole = new UserRoleMapping()
+                var role = await _unitOfWork.RoleRepository.GetByNameAsync(n => n.Name == model.Role);
+                if (role != null)
                 {
-                    UserId = user.Id,
-                    RoleId = role.Id,
-                    CreatedBy = userId,
-                    ModifiedBy = userId,
-                };
-                await _unitOfWork.UserRoleMappingRepository.AddAsync(userRole);
-                await _unitOfWork.CommitAsync();
+                    var userRole = new UserRoleMapping()
+                    {
+                        UserId = user.Id,
+                        RoleId = role.Id,
+                        CreatedBy = userId,
+                        ModifiedBy = userId,
+                    };
+                    await _unitOfWork.UserRoleMappingRepository.AddAsync(userRole);
+                    await _unitOfWork.CommitAsync();
+                }
+                else
+                {
+                    var newRole = new Role()
+                    {
+                        Name = model.Role!,
+                        CreatedDate = DateTime.UtcNow,
+                        CreatedBy = user.Id,
+                        ModifiedDate = DateTime.UtcNow,
+                        ModifiedBy = user.Id,
+                        IsActive = true,
+                    };
+                    await _unitOfWork.RoleRepository.AddAsync(newRole);
+                    await _unitOfWork.CommitAsync();
+
+                    var userRole = new UserRoleMapping()
+                    {
+                        UserId = user.Id,
+                        RoleId = newRole.Id,
+                        CreatedBy = userId,
+                        ModifiedBy = userId,
+                    };
+                    await _unitOfWork.UserRoleMappingRepository.AddAsync(userRole);
+                    await _unitOfWork.CommitAsync();
+                }
             }
             return true;
         }
