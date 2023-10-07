@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TMS.Model;
 using TMS.ModelDTO.Task;
@@ -9,6 +10,7 @@ using TMS.Utility;
 
 namespace TMS.API.Controllers.Task
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class TaskController : BaseApiController

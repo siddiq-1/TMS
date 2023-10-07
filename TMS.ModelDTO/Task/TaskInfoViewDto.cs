@@ -8,7 +8,7 @@ namespace TMS.ModelDTO.Task
 {
     public class TaskInfoViewDto
     {
-        public int Id { get; set; }
+        public int TaskId { get; set; }
         public int From { get; set; }
         public int To { get; set; }
         public string SortColumn { get; set; }

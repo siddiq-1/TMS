@@ -48,7 +48,7 @@ namespace TMS.Service.Service
                 Priority = model.PriorityId,
             };
             await _unitOfWork.TaskRepository.AddAsync(task);
-            await _unitOfWork.CommitAsync();
+           // await _unitOfWork.CommitAsync();
             if (!string.IsNullOrEmpty(model.UserIds))
             {
                 var userIdList = HelperMethod.SplitString(model.UserIds);

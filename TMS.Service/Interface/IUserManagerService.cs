@@ -19,7 +19,7 @@ namespace TMS.Service.Interface
               int page = 1,
               int take = 10);
         Task<UserManagerMappingDto> GetManagerByIdAsync(int id);
-        Task<UserManagerMappingDto> GetManagerByUserIdAsync(int id);
+        Task<UserManagerMappingDto> GetManagerByUserIdAsync(int userId);
         Task<UserManagerMapping> AddAsync(int loginId, UserManagerMappingDto model);
         Task<UserManagerMapping> UpdateAsync(int userId, int userManagerMappingId, UserManagerMappingDto model);
         Task<bool> DeleteAsync(int id);

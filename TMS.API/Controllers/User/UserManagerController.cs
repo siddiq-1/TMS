@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TMS.Model;
 using TMS.ModelDTO.User;
@@ -7,6 +8,7 @@ using TMS.Utility;
 
 namespace TMS.API.Controllers.User
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UserManagerController : BaseApiController

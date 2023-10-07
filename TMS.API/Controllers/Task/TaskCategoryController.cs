@@ -7,7 +7,7 @@ using TMS.Utility;
 
 namespace TMS.API.Controllers.Task
 {
-    [Authorize]
+    [Authorize(Roles ="Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class TaskCategoryController : BaseApiController
@@ -48,8 +48,8 @@ namespace TMS.API.Controllers.Task
         {
             return Response(await _taskCategoryService.DeleteAsync(id));
         }
-        [Authorize(Roles = "Admin")]
-        [HttpPost("TaskCategory/BulkUpload")]
+        
+        [HttpPost("BulkUpload")]
         public async Task<ServiceResponse<bool>> BulkUploadTaskCategory(BulkUploadDto bulkUploadDto)
         {
             return Response(await _taskCategoryService.BulkUploadTaskCategory(userId, bulkUploadDto));
