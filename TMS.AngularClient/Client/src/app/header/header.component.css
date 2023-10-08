@@ -1,0 +1,51 @@
+.navigation-bar{
+ display: flex;
+ justify-content: space-between;   
+ background-color: beige;
+}
+.navigation-bar ul{
+    display: inline-flex;
+    list-style-type: none;
+    margin: 27px 0px 0px;
+}
+.navigation-bar li{
+    margin-right: 27px;
+    text-decoration: none;
+    font-size: 22px;
+}
+.navigation-bar li a{
+    text-decoration: none;
+    color: black;
+}
+.Search input{
+    margin: 27px 0px -303px 0px;
+    width: 340px;
+    border-right: 0px;
+    height: 29px;
+    border: 1px solid grey;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    outline: none;
+    background-color: beige;
+}
+.Search button{
+    height: 33px;
+    border: 0.5px solid grey;
+    border-left: 0px;
+    background-color: white;
+    cursor: pointer;
+    width: 70px;
+}
+.Profile-Logo img{
+    height: 55px;
+    margin-left: -80px;
+    border-radius: 12px;
+}
+.Profile-Logo {
+display: flex;
+margin-left: 52px;
+}
+.Profile-Logo p{
+    margin: 27px 0px 0px 9px;
+}
